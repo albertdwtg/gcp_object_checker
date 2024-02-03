@@ -7,7 +7,6 @@ resource "google_service_account" "sa-job-obj-checker" {
 resource "google_cloud_run_v2_job" "object_checker" {
   name     = var.project_id
   location = var.region
-  service_account = ""
   template {
     template {
       containers {
