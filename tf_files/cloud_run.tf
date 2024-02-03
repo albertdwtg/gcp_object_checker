@@ -1,15 +1,15 @@
 resource "google_cloud_run_v2_job" "object_checker" {
-  name     = "object_checker_job"
-  location = "us-central1"
+  name     = var.project_id
+  location = var.region
 
   template {
     template {
       containers {
-        image = "us-docker.pkg.dev/cloudrun/container/hello"
+        image = "${var.artifact_registry_image_name}:latest"
         resources {
           limits = {
-            cpu    = "2"
-            memory = "1024Mi"
+            cpu    = var.max_cpu_job
+            memory = var.max_memory_job
           }
         }
       }
