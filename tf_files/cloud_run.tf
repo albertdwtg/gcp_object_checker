@@ -1,6 +1,6 @@
 resource "google_service_account" "sa-job-obj-checker" {
   account_id   = "sa-obj-checker-job"
-  display_name = "Object Checker Job service account"
+  display_name = "Object Checker job service account"
 }
 
 
