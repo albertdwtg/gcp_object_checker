@@ -22,6 +22,12 @@ jobs:
       with:
         workload_identity_provider: '${{ secrets.WIF_PROVIDER }}'
         service_account: '${{ secrets.WIF_SA }}'
+    - name: "Set up Cloud SDK"
+      uses: "google-github-actions/setup-gcloud@v1"
+    - name: "Connect to gcloud"
+      run: gcloud auth login
+    - name: "Connect to Artifact Registry"
+      run: gcloud auth configure-docker europe-west1-docker.pkg.dev
     - name: Build image
       run: docker build . --file Dockerfile --tag ${{ env.GAR_LOCATION }}
       # working-directory: ../
