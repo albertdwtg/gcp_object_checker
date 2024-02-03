@@ -1,7 +1,13 @@
+resource "google_service_account" "sa-job-obj-checker" {
+  account_id   = "sa-obj-checker-job"
+  display_name = "Object Checker Job service account"
+}
+
+
 resource "google_cloud_run_v2_job" "object_checker" {
   name     = var.project_id
   location = var.region
-
+  service_account = ""
   template {
     template {
       containers {
@@ -13,6 +19,7 @@ resource "google_cloud_run_v2_job" "object_checker" {
           }
         }
       }
+      service_account = google_service_account.sa-job-obj-checker.email
     }
   }
   lifecycle {
