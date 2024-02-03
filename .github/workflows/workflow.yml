@@ -6,7 +6,7 @@ on:
 
 env:
   GAR_LOCATION: "europe-west1-docker.pkg.dev/${{secrets.PROJECT_ID}}/objectchecker"
-  TAG: ${GITHUB_REF#refs/*/}
+  TAG: ${{github.ref_name}}
   IMAGE_NAME: "cloud_run_job"
 
 
