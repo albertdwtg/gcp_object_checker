@@ -24,6 +24,7 @@ jobs:
       shell: bash
       run: |
         # Créer un tableau vide pour stocker les noms des dossiers
+        echo pwd
         folders=()
 
         # Itérer sur chaque élément dans le dossier "A"
