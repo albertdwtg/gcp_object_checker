@@ -23,7 +23,7 @@ jobs:
       id-token: 'write'
     strategy:
       matrix:
-        folder: ${{ fromJson(env.folders) }}
+        folder: [first_job, second_job]
     steps:
 
     - name: Checkout
