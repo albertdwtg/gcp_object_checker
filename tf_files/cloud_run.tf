@@ -33,8 +33,9 @@ resource "google_cloud_run_v2_job" "object_checker" {
   location = var.region
   template {
     template {
+      timeout = each.value.timeout
+      max_retries = each.value.max_retries
       containers {
-        # image = "europe-west1-docker.pkg.dev/${var.project_id}/jobs-launcher/${each.key}"
         image = "europe-west1-docker.pkg.dev/${var.project_id}/jobs-launcher/${each.key}:${var.images_tag}"
         resources {
           limits = {
