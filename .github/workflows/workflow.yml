@@ -5,77 +5,84 @@ on:
     branches: ["develop", "main"]
 
 env:
-  GAR_LOCATION: "europe-west1-docker.pkg.dev/${{secrets.PROJECT_ID}}/objectchecker"
+  # GAR_LOCATION: "europe-west1-docker.pkg.dev/${{secrets.PROJECT_ID}}/objectchecker"
+  GAR_LOCATION: "europe-west1-docker.pkg.dev/${{secrets.PROJECT_ID}}/jobs-launcher"
   TAG: ${{github.sha}}
   IMAGE_NAME: "cloud_run_job"
   TF_FOLDER: "tf_files/"
+  FOLDERS: |
+    - first_job
+    - second_job
 
 
 jobs:
-  # deploy:
-  #   runs-on: ubuntu-latest
-  #   permissions:
-  #     contents: 'read'
-  #     id-token: 'write'
-  #   steps:
-
-  #   - name: Checkout
-  #     uses: actions/checkout@v3
-
-  #   - name: Google Auth
-  #     uses: 'google-github-actions/auth@v2'
-  #     with:
-  #       workload_identity_provider: '${{ secrets.WIF_PROVIDER }}'
-  #       service_account: '${{ secrets.WIF_SA }}'
-
-  #   - name: "Set up Cloud SDK"
-  #     uses: "google-github-actions/setup-gcloud@v1"
-
-  #   - name: "Connect to Artifact Registry"
-  #     run: gcloud auth configure-docker europe-west1-docker.pkg.dev --quiet
-
-  #   - name: Build image
-  #     run: docker build . --file Dockerfile --tag ${{ env.GAR_LOCATION }}/${{ env.IMAGE_NAME }}:${{ env.TAG }}
-
-  #   - name: Push image
-  #     run: docker push ${{ env.GAR_LOCATION }}/${{ env.IMAGE_NAME }}:${{ env.TAG }}
-  
-  terraform:
+  deploy:
     runs-on: ubuntu-latest
     permissions:
       contents: 'read'
       id-token: 'write'
-    defaults:
-      run:
-        working-directory: ${{ env.TF_FOLDER }}
+    strategy:
+      matrix:
+        folder: ${{ fromJson(env.folders) }}
     steps:
+
     - name: Checkout
       uses: actions/checkout@v3
+
     - name: Google Auth
       uses: 'google-github-actions/auth@v2'
       with:
-        create_credentials_file: 'true'
         workload_identity_provider: '${{ secrets.WIF_PROVIDER }}'
         service_account: '${{ secrets.WIF_SA }}'
-    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v2
 
-    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-    - name: Terraform Init
-      run: terraform init
+    - name: "Set up Cloud SDK"
+      uses: "google-github-actions/setup-gcloud@v1"
+
+    - name: "Connect to Artifact Registry"
+      run: gcloud auth configure-docker europe-west1-docker.pkg.dev --quiet
+
+    - name: Build image
+      run: docker build ./src/${{ matrix.folder }} --file Dockerfile --tag ${{ env.GAR_LOCATION }}/${{ matrix.folder }}:${{ env.TAG }}
+
+    - name: Push image
+      run: docker push ${{ env.GAR_LOCATION }}/${{ matrix.folder }}:${{ env.TAG }}
+  
+  # terraform:
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     contents: 'read'
+  #     id-token: 'write'
+  #   defaults:
+  #     run:
+  #       working-directory: ${{ env.TF_FOLDER }}
+  #   steps:
+  #   - name: Checkout
+  #     uses: actions/checkout@v3
+  #   - name: Google Auth
+  #     uses: 'google-github-actions/auth@v2'
+  #     with:
+  #       create_credentials_file: 'true'
+  #       workload_identity_provider: '${{ secrets.WIF_PROVIDER }}'
+  #       service_account: '${{ secrets.WIF_SA }}'
+  #   # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+  #   - name: Setup Terraform
+  #     uses: hashicorp/setup-terraform@v2
+
+  #   # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+  #   - name: Terraform Init
+  #     run: terraform init
     
-    - name: Setup terraform variables
-      id: vars
-      run: |-
-        cat > pipeline.auto.tfvars <<EOF
-        region="europe-west1" 
-        project_id="${{ secrets.PROJECT_ID }}"
-        artifact_registry_image_name="${{ env.GAR_LOCATION }}/${{ env.IMAGE_NAME }}:${{ env.TAG }}"
-        EOF
-    # Generates an execution plan for Terraform
-    - name: Terraform Plan
-      run: terraform plan -lock=false
+  #   - name: Setup terraform variables
+  #     id: vars
+  #     run: |-
+  #       cat > pipeline.auto.tfvars <<EOF
+  #       region="europe-west1" 
+  #       project_id="${{ secrets.PROJECT_ID }}"
+  #       artifact_registry_image_name="${{ env.GAR_LOCATION }}/${{ env.IMAGE_NAME }}:${{ env.TAG }}"
+  #       EOF
+  #   # Generates an execution plan for Terraform
+  #   - name: Terraform Plan
+  #     run: terraform plan -lock=false
     
-    - name: Terraform Apply
-      run: terraform apply -auto-approve -input=false -lock=false
+  #   - name: Terraform Apply
+  #     run: terraform apply -auto-approve -input=false -lock=false
