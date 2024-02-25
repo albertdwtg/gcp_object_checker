@@ -1,3 +1,8 @@
+resource "google_service_account" "sa-jobs-launcher" {
+  account_id   = "sa-jobs-launcher"
+  display_name = "Jobs launcher job service account"
+}
+
 # resource "google_cloud_run_v2_job" "object_checker" {
 #   name     = var.project_id
 #   location = var.region
@@ -37,7 +42,7 @@ resource "google_cloud_run_v2_job" "object_checker" {
           }
         }
       }
-      service_account = google_service_account.sa-job-obj-checker.email
+      service_account = google_service_account.sa-jobs-launcher.email
     }
   }
 }
