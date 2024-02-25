@@ -29,10 +29,7 @@ jobs:
         uses: philips-labs/list-folders-action@v1
         with:
           path: ./src
-
-    # Exporter la variable pour l'utiliser dans d'autres étapes
-    outputs:
-      folders: ${{ steps.list-folders.outputs.folders }}
+          
   # deploy:
   #   runs-on: ubuntu-latest
   #   permissions:
