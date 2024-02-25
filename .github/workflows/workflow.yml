@@ -16,35 +16,19 @@ env:
 
 
 jobs:
-  list-folders:
+  find-jobs:
+    name: Find Jobs
     runs-on: ubuntu-latest
-
+    container: debian:buster-slim
+    outputs:
+      folders: ${{ steps.jobs.outputs.folders }}
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-    - name: List folders in "src"
-      shell: bash
-      run: |
-        # Créer un tableau vide pour stocker les noms des dossiers
-        echo $(pwd)
-        ls -d src/
-        folders=()
+      - uses: actions/checkout@v1
 
-        # Itérer sur chaque élément dans le dossier "A"
-        for file in .src/*; do
-          # Vérifier si l'élément est un dossier
-          echo $(file)
-          if [ -d "$file" ]; then
-            # Ajouter le nom du dossier au tableau
-            folders+=("$file")
-          fi
-        done
-
-        # Imprimer la liste des dossiers
-        echo "Liste des dossiers : ${folders[@]}"
-
-        # Enregistrer la liste des dossiers dans une variable
-        echo "::set-output name=folders::${folders[@]}"
+      - id: jobs
+        uses: philips-labs/list-folders-action@v1
+        with:
+          path: ./src
 
     # Exporter la variable pour l'utiliser dans d'autres étapes
     outputs:
