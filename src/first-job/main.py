@@ -1,1 +1,2 @@
-print("image run 1")
+def run():
+    print("image run 1")

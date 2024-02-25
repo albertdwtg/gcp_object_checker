@@ -35,7 +35,7 @@ resource "google_cloud_run_v2_job" "object_checker" {
     template {
       containers {
         # image = "europe-west1-docker.pkg.dev/${var.project_id}/jobs-launcher/${each.key}"
-        image = "europe-west1-docker.pkg.dev/model-zoo-382809/jobs-launcher/first-job:551d297663f0914ed36141afd9ba55d589ab3021"
+        image = "europe-west1-docker.pkg.dev/${var.project_id}/jobs-launcher/${each.key}:${var.images}"
         resources {
           limits = {
             cpu    = each.value.max_cpu_job

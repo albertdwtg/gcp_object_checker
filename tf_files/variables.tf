@@ -25,8 +25,7 @@ variable "max_memory_job"{
     default = "512Mi"
 }
 
-# variable "images_tag" {
-#   type = string
-#   description = "Tag of the images, based on commit tag"
-
-# }
+variable "images_tag" {
+  type = string
+  description = "Tag of the images, based on commit tag"
+}
