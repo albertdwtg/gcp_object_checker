@@ -4,6 +4,6 @@ WORKDIR /app
 
 ARG FOLDER
 
-COPY $FOLDER .
+COPY $FOLDER/ .
 
 CMD ["python", "main.py"]
