@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: "tf_files/"
+        working-directory: "src/"
     steps:
     - name: Checkout
       uses: actions/checkout@v3
