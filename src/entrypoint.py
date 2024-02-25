@@ -1,3 +1,3 @@
 from main import run
 
-print(run)
+print(run())
