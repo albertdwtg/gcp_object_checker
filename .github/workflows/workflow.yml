@@ -23,6 +23,8 @@ jobs:
       run:
         working-directory: "tf_files/"
     steps:
+    - name: Checkout
+      uses: actions/checkout@v3
     - run: ls
     - run: sudo apt update && sudo apt install tree jq -y
       shell: bash
