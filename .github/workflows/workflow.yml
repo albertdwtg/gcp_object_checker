@@ -45,7 +45,7 @@ jobs:
       id-token: 'write'
     strategy:
       matrix:
-        folder: ${{ needs.find_jobs.outputs.list_folders }}
+        folder: ${{ fromJson(needs.find_jobs.outputs.list_folders) }}
     steps:
 
     - name: Checkout
