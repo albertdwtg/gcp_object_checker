@@ -23,7 +23,7 @@ jobs:
       run:
         working-directory: "src/"
     outputs:
-      list_folders: ${{ steps.set_folders.outputs.list_folders }}
+      list_folders: ${{ steps.set_folders.outputs.folders }}
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -35,7 +35,7 @@ jobs:
       run: |
         folders=$(tree -J -d -L 1 | jq -c '.[0].contents | map(.name)')
         echo $folders
-        echo "folders=$folders" >> $GITHUB_OUTPUT
+        echo "folders=$folders" >> "$GITHUB_OUTPUT"
 
   deploy:
     runs-on: ubuntu-latest
