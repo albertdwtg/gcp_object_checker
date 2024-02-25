@@ -24,3 +24,8 @@ variable "max_memory_job"{
     description = "Max memory to use for cloud run job"
     default = "512Mi"
 }
+
+variable "images_tag" {
+  type = string
+  description = "Tag of the images, based on commit tag"
+}
