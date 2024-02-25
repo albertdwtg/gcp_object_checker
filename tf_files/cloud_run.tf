@@ -28,7 +28,7 @@ resource "google_service_account" "sa-jobs-launcher" {
 # }
 
 resource "google_cloud_run_v2_job" "object_checker" {
-  for_each = locals.jobs
+  for_each = local.jobs
   name     = each.key
   location = var.region
   template {
