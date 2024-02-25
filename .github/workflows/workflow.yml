@@ -24,13 +24,13 @@ jobs:
       shell: bash
       run: |
         # Créer un tableau vide pour stocker les noms des dossiers
-        echo pwd
+        echo $(pwd)
         folders=()
 
         # Itérer sur chaque élément dans le dossier "A"
         for file in .src/*; do
           # Vérifier si l'élément est un dossier
-          echo "$file"
+          echo $(file)
           if [ -d "$file" ]; then
             # Ajouter le nom du dossier au tableau
             folders+=("$file")
