@@ -27,14 +27,12 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-    - run: ls
     - run: sudo apt update && sudo apt install tree jq -y
       shell: bash
     - id: set_folders
       shell: bash
       run: |
         folders=$(tree -J -d -L 1 | jq -c '.[0].contents | map(.name)')
-        echo $folders
         echo "folders=$folders" >> "$GITHUB_OUTPUT"
 
   deploy:
@@ -64,7 +62,7 @@ jobs:
       run: gcloud auth configure-docker europe-west1-docker.pkg.dev --quiet
 
     - name: Build image
-      run: docker build ./src --file Dockerfile --tag ${{ env.GAR_LOCATION }}/${{ matrix.folder }}:${{ env.TAG }} --build-arg FOLDER=${{ matrix.folder }}
+      run: docker build ./src --file ./src/Dockerfile --tag ${{ env.GAR_LOCATION }}/${{ matrix.folder }}:${{ env.TAG }} --build-arg FOLDER=${{ matrix.folder }}
 
     - name: Push image
       run: docker push ${{ env.GAR_LOCATION }}/${{ matrix.folder }}:${{ env.TAG }}
