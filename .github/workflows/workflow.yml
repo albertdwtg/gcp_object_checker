@@ -20,6 +20,7 @@ jobs:
     name: Find Jobs
     runs-on: ubuntu-latest
     steps:
+    - run: ls
     - run: sudo apt update && sudo apt install tree jq -y
       shell: bash
     - id: set-folders
