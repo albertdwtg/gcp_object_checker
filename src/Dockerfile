@@ -14,4 +14,4 @@ RUN pip install --no-cache-dir -r central_requirements.txt
 EXPOSE 8080
 ENV FLASK_APP=entrypoint.py
 
-CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
+CMD ["flask", "run", "--host", "0.0.0.0"]
