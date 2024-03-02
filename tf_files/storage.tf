@@ -5,7 +5,7 @@ resource "google_storage_bucket" "jobs_launcher_bucket" {
 data "archive_file" "zip_cf_code" {
   type        = "zip"
   output_path = "/tmp/function-source.zip"
-  source_dir  = "cloud_function_code/"
+  source_dir  = "./cloud_function_code/"
 }
 resource "google_storage_bucket_object" "blob_cf_code" {
   name   = "function-source.zip"
