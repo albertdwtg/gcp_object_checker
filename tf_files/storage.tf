@@ -10,5 +10,5 @@ data "archive_file" "zip_cf_code" {
 resource "google_storage_bucket_object" "blob_cf_code" {
   name   = "function_source.zip"
   bucket = google_storage_bucket.jobs_launcher_bucket.name
-  source = data.archive_file.zip_cf_code.output_path 
+  source = data.archive_file.zip_cf_code.output_path
 }

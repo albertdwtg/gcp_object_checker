@@ -1,6 +1,6 @@
 resource "google_service_account" "sa-jobs-launcher" {
-  account_id   = "sa-jobs-launcher"
-  display_name = "Jobs launcher job service account"
+  account_id  = "sa-jobs-launcher"
+  description = "Jobs launcher job service account"
 }
 
 resource "google_cloud_run_v2_service" "jobs" {
