@@ -62,10 +62,7 @@ jobs:
 
     - name: Build image
       run: |
-        docker build ./${{ env.JOBS_FOLDER }} --file ./${{ env.JOBS_FOLDER }}/Dockerfile \
-        --tag ${{ env.GAR_LOCATION }}/${{ matrix.folder }}:${{ env.TAG }} \
-        --build-arg FOLDER=${{ matrix.folder }}\
-        --build-arg PORT=${{ env.CLOUD_RUN_PORT }}
+        docker build ./${{ env.JOBS_FOLDER }} --file ./${{ env.JOBS_FOLDER }}/Dockerfile --tag ${{ env.GAR_LOCATION }}/${{ matrix.folder }}:${{ env.TAG }} --build-arg FOLDER=${{ matrix.folder }} --build-arg PORT=${{ env.CLOUD_RUN_PORT }}
 
     - name: Push image
       run: docker push ${{ env.GAR_LOCATION }}/${{ matrix.folder }}:${{ env.TAG }}
