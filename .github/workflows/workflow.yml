@@ -11,7 +11,7 @@ env:
   IMAGE_NAME: "cloud_run_job"
   TF_FOLDER: "tf_files/"
   JOBS_FOLDER: "src"
-  CLOUD_RUN_PORT: 5000
+  CLOUD_RUN_PORT: "5000"
 
 
 jobs:
