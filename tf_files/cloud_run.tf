@@ -3,7 +3,7 @@ resource "google_service_account" "sa-jobs-launcher" {
   display_name = "Jobs launcher job service account"
 }
 
-resource "google_cloud_run_v2_service" "object_checker" {
+resource "google_cloud_run_v2_service" "jobs" {
   for_each = local.jobs
   name     = each.key
   location = var.region

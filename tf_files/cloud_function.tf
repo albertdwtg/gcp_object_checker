@@ -1,3 +1,8 @@
+resource "google_service_account" "sa-cloud-function" {
+  account_id   = "sa-cf-jobs-launcher"
+  display_name = "Service account used by jobs launcher cloud function"
+}
+
 resource "google_cloudfunctions_function" "jobs_launcher_cf" {
   name        = "jobs_launcher"
   description = "Jobs launcher cloud function"
@@ -9,4 +14,5 @@ resource "google_cloudfunctions_function" "jobs_launcher_cf" {
   trigger_http                 = true
   timeout                      = 60
   entry_point                  = "run"
+  service_account_email = google_service_account.sa-cloud-function.email
 }
