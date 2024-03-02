@@ -29,3 +29,8 @@ variable "images_tag" {
   type = string
   description = "Tag of the images, based on commit tag"
 }
+
+variable "cloud_run_port" {
+  type = number
+  description = "Port on which cloud run will listen"
+}

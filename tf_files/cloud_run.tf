@@ -11,6 +11,9 @@ resource "google_cloud_run_v2_service" "object_checker" {
     timeout = each.value.timeout
     containers {
       image = "europe-west1-docker.pkg.dev/${var.project_id}/jobs-launcher/${each.key}:${var.images_tag}"
+      ports {
+        container_port = var.cloud_run_port
+      }
       resources {
         limits = {
           cpu    = each.value.max_cpu_job
