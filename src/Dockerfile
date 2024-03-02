@@ -14,7 +14,7 @@ COPY $FOLDER/ /app
 RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install --no-cache-dir -r central_requirements.txt
 
-EXPOSE $PORT
+EXPOSE 5000
 ENV FLASK_APP=entrypoint.py
 
-CMD ["python", "-m", "flask", "run", "--host", "0.0.0.0", "--port", "$PORT"]
+CMD ["python", "-m", "flask", "run", "--host", "0.0.0.0", "--port", "5000"]
