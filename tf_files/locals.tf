@@ -7,10 +7,10 @@ locals {
       max_retries    = 2
       scheduler = {
         description      = "First job scheduler"
-        cron             = "*/10 * * * *"
+        cron             = "*/1 * * * *"
         time_zone        = "Europe/Dublin"
         attempt_deadline = "60s"
-        paused           = true
+        paused           = false
         body = {
           var1 = "Test1"
           var2 = "Test2"
