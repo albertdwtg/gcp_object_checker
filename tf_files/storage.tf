@@ -8,7 +8,7 @@ data "archive_file" "zip_cf_code" {
   source_dir  = "../cloud_function_code/"
 }
 resource "google_storage_bucket_object" "blob_cf_code" {
-  name   = "function_source.zip"
+  name   = "function_source_${data.archive_file.zip_cf_code.output_md5}.zip"
   bucket = google_storage_bucket.jobs_launcher_bucket.name
   source = data.archive_file.zip_cf_code.output_path
 }
