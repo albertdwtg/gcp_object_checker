@@ -20,6 +20,10 @@ resource "google_cloud_run_v2_service" "jobs" {
           memory = each.value.max_memory_job
         }
       }
+      env {
+        name  = "CONTAINER_PORT"
+        value = var.cloud_run_port
+      }
     }
     service_account = google_service_account.sa-jobs-launcher.email
   }
