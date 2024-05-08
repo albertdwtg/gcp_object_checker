@@ -10,6 +10,7 @@ def run(request):
     print(payload)
     print(request.headers)
     scheduler_name = request.headers.get("X-Cloudscheduler-Jobname")
+    function_execution_id = request.headers.get("Function-Execution-Id")
     my_job = JobHandler(
         job_name = scheduler_name,
         job_reception_time = current_utc_datetime,
@@ -17,6 +18,7 @@ def run(request):
         job_type = payload["job_type"],
         job_creation_date = payload["creation_date"],
         job_owner = payload["job_owner"]
+        function_execution_id = function_execution_id
     )
     print(my_job)
     

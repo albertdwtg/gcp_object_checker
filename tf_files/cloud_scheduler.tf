@@ -14,6 +14,7 @@ resource "google_cloud_scheduler_job" "schedulers" {
     body        = base64encode(jsonencode(file("../src/${each.key}/payload.json")))
     headers = {
       "Content-Type" = "application/json"
+      "Last-Deployment" = "${timestamp()}"
     }
     oidc_token {
       service_account_email = google_service_account.sa-cloud-function.email
