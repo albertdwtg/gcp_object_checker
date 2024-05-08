@@ -11,7 +11,7 @@ resource "google_cloud_scheduler_job" "schedulers" {
     http_method = "POST"
     uri         = google_cloudfunctions_function.jobs_launcher_cf.https_trigger_url
     # body        = base64encode(replace(jsonencode(each.value.scheduler.body), "\"", ""))
-    body        = base64encode(replace(jsonencode(file("../src/${each.key}/payload.json"))), "\"", "")
+    body        = base64encode(jsonencode(file("../src/${each.key}/payload.json")))
     headers = {
       "Content-Type" = "application/json"
     }
