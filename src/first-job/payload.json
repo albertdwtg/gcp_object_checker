@@ -1,4 +1,9 @@
 {
-    "var1": "test1",
-    "var2": "test2"
+    "job_owner": "Albert",
+    "creation_date": "08/05/2024",
+    "job_type": "UNIQUE",
+    "variables" : {
+        "var1": "test1",
+        "var2": "test2"
+    }
 }

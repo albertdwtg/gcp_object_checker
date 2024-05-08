@@ -1,6 +1,7 @@
 import functions_framework
 import json
 from inputs import JobHandler
+from datetime import datetime
 
 @functions_framework.http
 def run(request):
@@ -11,18 +12,27 @@ def run(request):
     scheduler_name = request.headers.get("X-Cloudscheduler-Jobname")
     my_job = JobHandler(
         job_name = scheduler_name,
-        job_reception_time = "2024",
+        job_reception_time = current_utc_datetime,
         job_payload = payload,
-        job_type = "UNIQUE"
+        job_type = payload["job_type"],
+        job_creation_date = payload["creation_date"],
+        job_owner = payload["job_owner"]
     )
     print(my_job)
     
     return "OK"
 
 def convert_payload_to_dict(payload: bytes):
-    payload_str = payload.decode().strip('"')
-    payload_str = payload_str.replace("\\n","")
-    payload_str = payload_str.replace("\\","")
-    payload_str = payload_str.replace(" ","")
-    payload_dict = json.loads(payload_str)
+    try:
+        payload_str = payload.decode().strip('"')
+        payload_str = payload_str.replace("\\n","")
+        payload_str = payload_str.replace("\\","")
+        payload_str = payload_str.replace(" ","")
+        payload_dict = json.loads(payload_str)
+    except Exception as e:
+        raise Exception(f"Error while parsing JSON payload : {str(e)}")
     return payload_dict
+
+def current_utc_datetime():
+    value = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
+    return value
