@@ -9,7 +9,7 @@ class JobType(Enum):
     UNIQUE = ""
     
 def validate_job_type(job_type: str):
-    possible_values = [e.name for e in JobType]
+    possible_values = [name for name, member in JobType.__members__.items()]
     if job_type not in possible_values:
         raise ValueError(f"job_type value is not valid, possible values : {possible_values}")
     return job_type
