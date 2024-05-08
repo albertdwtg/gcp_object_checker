@@ -10,7 +10,7 @@ class JobType(Enum):
     
 def validate_job_type(job_type: str):
     possible_values = [e.name for e in JobType]
-    if job_type not in list(JobType.members):
+    if job_type not in possible_values:
         raise ValueError(f"job_type value is not valid, possible values : {possible_values}")
     return job_type
     
