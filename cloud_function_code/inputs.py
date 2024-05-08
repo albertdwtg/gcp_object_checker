@@ -24,6 +24,7 @@ class JobHandler:
     job_type: str
     job_creation_date: str
     job_owner: str
+    job_id: str = field(init=False)
     function_execution_id: str
     
     def __post_init__(self):
