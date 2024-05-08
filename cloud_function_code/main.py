@@ -21,5 +21,8 @@ def run(request):
 
 def convert_payload_to_dict(payload: bytes):
     payload_str = payload.decode().strip('"')
+    payload_str = payload_str.replace("\\n","")
+    payload_str = payload_str.replace("\\","")
+    payload_str = payload_str.replace(" ","")
     payload_dict = json.loads(payload_str)
     return payload_dict
