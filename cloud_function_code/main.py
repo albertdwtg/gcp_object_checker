@@ -17,7 +17,7 @@ def run(request):
         job_payload = payload,
         job_type = payload["job_type"],
         job_creation_date = payload["creation_date"],
-        job_owner = payload["job_owner"]
+        job_owner = payload["job_owner"],
         function_execution_id = function_execution_id
     )
     print(my_job)
