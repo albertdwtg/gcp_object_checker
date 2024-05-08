@@ -4,6 +4,7 @@ from inputs import JobHandler
 
 @functions_framework.http
 def run(request):
+    print(request.data)
     payload = convert_payload_to_dict(request.data)
     print(payload)
     print(request.headers)
