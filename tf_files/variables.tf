@@ -34,3 +34,9 @@ variable "cloud_run_port" {
   type        = number
   description = "Port on which cloud run will listen"
 }
+
+variable "job_names" {
+  type        = list(string)
+  description = "job names"
+  default     = ["first-job", "second-job"]
+}
