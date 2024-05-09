@@ -11,7 +11,7 @@ locals {
         cron             = "*/30 * * * *"
         time_zone        = "Europe/Paris"
         attempt_deadline = "60s"
-        paused           = false
+        paused           = true
         body = {
           var1 = "Test1"
           var2 = "Test2"
