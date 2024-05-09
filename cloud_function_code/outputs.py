@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 import uuid
+import requests
 
 @dataclass(kw_only = True)
 class Execution:
@@ -17,5 +18,8 @@ class Execution:
         self.execution_id = uuid.uuid4().hex
     
     def run_request(self):
-        
+        response = requests.post(
+            url = self.request_url,
+            data = self.request_params
+        )
         pass

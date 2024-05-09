@@ -22,6 +22,8 @@ def run(request):
     )
     print(my_job)
     
+    my_job.run_executions()
+    
     return "OK"
 
 def convert_payload_to_dict(payload: bytes):

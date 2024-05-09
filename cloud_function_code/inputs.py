@@ -81,3 +81,7 @@ class JobHandler:
             else:
                 raise Exception("No cloud run urls provided in environment variables")
         return all_executions_ids, all_executions
+    
+    def run_executions(self):
+        for exec in self.job_executions:
+            exec.run_request()
