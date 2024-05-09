@@ -35,3 +35,7 @@ class Execution:
             url = self.request_url,
             data = self.request_params
         )
+        
+        print("RESPONSE: ", response)
+        print("RESPONSE: ", response.status_code)
+        print("RESPONSE: ", response.text)
