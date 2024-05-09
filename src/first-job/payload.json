@@ -1,6 +1,6 @@
 {
     "job_owner": "Albert",
-    "creation_date": "08/05/2024",
+    "creation_date": "2024-05-08",
     "job_type": "UNIQUE",
     "variables" : {
         "var1": "test1",

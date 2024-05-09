@@ -15,3 +15,7 @@ class Execution:
     
     def _create_execution_id(self):
         self.execution_id = uuid.uuid4().hex
+    
+    def run_request(self):
+        
+        pass
