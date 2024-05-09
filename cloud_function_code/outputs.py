@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 import uuid
 import requests
+import google.oauth2.id_token
+import google.auth.transport.requests
 
 @dataclass(kw_only = True)
 class Execution:
@@ -18,8 +20,18 @@ class Execution:
         self.execution_id = uuid.uuid4().hex
     
     def run_request(self):
+
+        request = google.auth.transport.requests.Request()
+        audience = self.request_url
+
+        id_token = google.oauth2.id_token.fetch_id_token(request, audience)
+        # headers = {'Authorization': f'bearer {id_token}'}
+        # service_response = requests.get(audience, headers=headers)
+        
+        print("ID TOKEN : ", id_token)
+        
         response = requests.post(
+            headers = {'Authorization': f'bearer {id_token}'},
             url = self.request_url,
             data = self.request_params
         )
-        pass

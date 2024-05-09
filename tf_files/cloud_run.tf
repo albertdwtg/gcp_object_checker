@@ -1,13 +1,14 @@
 resource "google_service_account" "sa-jobs-launcher" {
   account_id  = "sa-jobs-launcher"
-  description = "Jobs launcher job service account"
+  description = "Jobs launcher service account"
 }
 
 resource "google_cloud_run_v2_service" "jobs" {
-  for_each = local.jobs
-  name     = each.key
-  location = var.region
-  ingress = "INGRESS_TRAFFIC_INTERNAL_ONLY"
+  for_each    = local.jobs
+  name        = each.key
+  location    = var.region
+  description = "Job ${each.key} deployed with Jobs Launcher"
+  # ingress     = "INGRESS_TRAFFIC_INTERNAL_ONLY"
   template {
     timeout = each.value.timeout
     containers {
