@@ -5,8 +5,9 @@ from typing import List
 import hashlib
 from enum import Enum
 import os
+import json
 
-cloud_run_urls = os.environ.get("CLOUD_RUN_URLS")
+cloud_run_urls = json.loads(os.environ.get("CLOUD_RUN_URLS"))
 print("VALUE : ", cloud_run_urls)
 
 class JobType(Enum):
