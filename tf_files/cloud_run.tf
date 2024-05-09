@@ -7,6 +7,7 @@ resource "google_cloud_run_v2_service" "jobs" {
   for_each = local.jobs
   name     = each.key
   location = var.region
+  ingress = "INGRESS_TRAFFIC_INTERNAL_ONLY"
   template {
     timeout = each.value.timeout
     containers {
