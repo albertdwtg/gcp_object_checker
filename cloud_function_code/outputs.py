@@ -22,20 +22,12 @@ class Execution:
     def run_request(self):
 
         request = google.auth.transport.requests.Request()
-        audience = self.request_url
 
-        id_token = google.oauth2.id_token.fetch_id_token(request, audience)
-        # headers = {'Authorization': f'bearer {id_token}'}
-        # service_response = requests.get(audience, headers=headers)
-        
-        print("ID TOKEN : ", id_token)
+        id_token = google.oauth2.id_token.fetch_id_token(request, self.request_url)
         
         response = requests.post(
             headers = {'Authorization': f'bearer {id_token}'},
             url = self.request_url,
-            data = self.request_params
+            # data = self.request_params,
+            json = self.request_params
         )
-        
-        print("RESPONSE: ", response)
-        print("RESPONSE: ", response.status_code)
-        print("RESPONSE: ", response.text)

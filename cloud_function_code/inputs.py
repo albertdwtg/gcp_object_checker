@@ -35,6 +35,7 @@ class JobHandler:
         self._validate_job_owner()
         self._validate_creation_date()
         self.job_executions_ids, self.job_executions = self._create_executions()
+        self._validate_executions()
     
     def _create_job_id(self):
         job_name_hash = hashlib.md5(self.job_name.encode()).hexdigest()[:8]
@@ -68,19 +69,21 @@ class JobHandler:
         all_executions_ids = []
         if self.job_type == "UNIQUE":
             if cloud_run_urls is not None:
-                url = cloud_run_urls[self.job_name]
-                params = self.job_payload.get("variables")
                 execution_instance = Execution(
                     job_name = self.job_name,
                     job_id = self.job_id,
-                    request_url = url,
-                    request_params = params
+                    request_url = cloud_run_urls[self.job_name],
+                    request_params = self.job_payload.get("variables")
                 )
                 all_executions.append(execution_instance)
                 all_executions_ids.append(execution_instance.execution_id)
             else:
                 raise Exception("No cloud run urls provided in environment variables")
         return all_executions_ids, all_executions
+    
+    def _validate_executions(self):
+        if len(self.job_executions)==0 or len(self.job_executions_ids)==0:
+            raise ValueError("List of executions cannot be empty")
     
     def run_executions(self):
         for exec in self.job_executions:

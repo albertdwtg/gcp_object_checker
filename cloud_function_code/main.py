@@ -7,10 +7,7 @@ from inputs import JobHandler
 
 @functions_framework.http
 def run(request):
-    print(request.data)
     payload = convert_payload_to_dict(request.data)
-    print(payload)
-    print(request.headers)
     scheduler_name = request.headers.get("X-Cloudscheduler-Jobname")
     function_execution_id = request.headers.get("Function-Execution-Id")
     my_job = JobHandler(

@@ -12,8 +12,6 @@ app = Flask(__name__)
 def hello_world():
     """Example Hello World route."""
     name = os.environ.get("NAME", "World")
-    print(request)
-    print(request.headers)
     print(request.data)
     print(run())
     return f"Hello {name}!"
