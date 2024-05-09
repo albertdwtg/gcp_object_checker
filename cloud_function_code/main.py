@@ -15,7 +15,7 @@ def run(request):
         job_name = scheduler_name,
         job_reception_time = current_utc_datetime,
         job_payload = payload,
-        job_type = payload["job_type"],
+        job_type = payload["job_type"].upper(),
         job_creation_date = payload["creation_date"],
         job_owner = payload["job_owner"],
         function_execution_id = function_execution_id

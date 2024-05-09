@@ -1,4 +1,5 @@
 locals {
+  cloud_run_urls = [for i, id in local.jobs : { id : google_cloud_run_v2_service.jobs[id].uri}]
   jobs = {
     first-job = {
       max_cpu_job    = 1

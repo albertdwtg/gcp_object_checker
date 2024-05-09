@@ -15,4 +15,7 @@ resource "google_cloudfunctions_function" "jobs_launcher_cf" {
   timeout               = 60
   entry_point           = "run"
   service_account_email = google_service_account.sa-cloud-function.email
+  environment_variables = {
+    "CLOUD_RUN_URLS" = local.cloud_run_urls
+  }
 }
