@@ -5,6 +5,7 @@ from main import run
 from flask import request
 import json
 import base64
+import ast
 
 container_port = os.environ.get("CONTAINER_PORT")
 
@@ -26,7 +27,8 @@ def entrypoint():
     data_args = {}
     if isinstance(pubsub_message, dict) and "data" in pubsub_message:
         data = base64.b64decode(pubsub_message["data"]).decode("utf-8").strip()
-        data_args = json.loads(data)
+        # data_args = json.loads(data)
+        data_args = ast.literal_eval(data)
     
     #-- Execute function code
     run(**data_args)
