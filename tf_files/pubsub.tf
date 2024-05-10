@@ -4,9 +4,13 @@ resource "google_pubsub_topic" "jobs_launcher_topics" {
 }
 
 resource "google_pubsub_subscription" "jobs_launcher_subscription" {
-  for_each = local.jobs
-  name     = "subscription-launcher-${each.key}"
-  topic    = google_pubsub_topic.jobs_launcher_topics[each.key].name
+  for_each                   = local.jobs
+  name                       = "subscription-launcher-${each.key}"
+  topic                      = google_pubsub_topic.jobs_launcher_topics[each.key].name
+  retain_acked_messages      = false
+  message_retention_duration = "600s"
+  ack_deadline_seconds       = 600
+
   push_config {
     push_endpoint = google_cloud_run_v2_service.jobs[each.key].uri
     oidc_token {
@@ -15,6 +19,15 @@ resource "google_pubsub_subscription" "jobs_launcher_subscription" {
     attributes = {
       x-goog-version = "v1"
     }
+  }
+  expiration_policy {
+    ttl = ""
+  }
+  dead_letter_policy {
+    max_delivery_attempts = 5
+  }
+  retry_policy {
+    minimum_backoff = "600s"
   }
   depends_on = [google_cloud_run_v2_service.jobs]
 }
