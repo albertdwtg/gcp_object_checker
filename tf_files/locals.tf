@@ -27,7 +27,7 @@ locals {
       scheduler = {
         description      = "Second job scheduler"
         cron             = "*/10 * * * *"
-        time_zone        = "Europe/"
+        time_zone        = "Europe/Dublin"
         attempt_deadline = "60s"
         paused           = true
         body = {
