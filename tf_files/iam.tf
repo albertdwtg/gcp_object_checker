@@ -27,3 +27,10 @@ resource "google_cloudfunctions_function_iam_member" "invoker_cf" {
   role   = "roles/cloudfunctions.invoker"
   member = "serviceAccount:${google_service_account.sa-cloud-function.email}"
 }
+
+resource "google_pubsub_subscription_iam_member" "subscription_editor" {
+  for_each     = local.jobs
+  subscription = google_pubsub_subscription.jobs_launcher_subscription[each.key].name
+  role         = "roles/editor"
+  member       = "serviceAccount:${google_service_account.sa-cloud-function.email}"
+}
