@@ -28,9 +28,17 @@ resource "google_cloudfunctions_function_iam_member" "invoker_cf" {
   member = "serviceAccount:${google_service_account.sa-cloud-function.email}"
 }
 
-resource "google_pubsub_subscription_iam_member" "subscription_editor" {
-  for_each     = local.jobs
-  subscription = google_pubsub_subscription.jobs_launcher_subscription[each.key].name
-  role         = "roles/editor"
-  member       = "serviceAccount:${google_service_account.sa-cloud-function.email}"
+# resource "google_pubsub_subscription_iam_member" "subscription_editor" {
+#   for_each     = local.jobs
+#   subscription = google_pubsub_subscription.jobs_launcher_subscription[each.key].name
+#   role         = "roles/editor"
+#   member       = "serviceAccount:${google_service_account.sa-cloud-function.email}"
+# }
+
+resource "google_pubsub_topic_iam_member" "topic_editor" {
+  for_each = local.jobs
+  project  = google_pubsub_topic.jobs_launcher_topics[each.key].project
+  topic    = google_pubsub_topic.jobs_launcher_topics[each.key].name
+  role     = "roles/editor"
+  member   = "serviceAccount:${google_service_account.sa-cloud-function.email}"
 }
