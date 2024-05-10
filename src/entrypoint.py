@@ -4,8 +4,7 @@ from flask import Flask
 from main import run
 from flask import request
 import json
-import base64
-import ast
+from threading import Thread
 
 container_port = os.environ.get("CONTAINER_PORT")
 
@@ -22,16 +21,11 @@ def entrypoint():
     if not isinstance(envelope, dict) or "message" not in envelope:
         msg = "invalid Pub/Sub message format"
         return f"Bad Request: {msg}", 400
-
-    pubsub_message = envelope["message"]
-    data_args = {}
-    if isinstance(pubsub_message, dict) and "data" in pubsub_message:
-        data = base64.b64decode(pubsub_message["data"]).decode("utf-8").strip()
-        # data_args = json.loads(data)
-        data_args = ast.literal_eval(data)
     
+    # data_args = read_pubsub_message(envelope = envelope)
+    Thread(target=read_pubsub_message, args = [envelope]).start()
     #-- Execute function code
-    run(**data_args)
+    # run(**data_args)
     return "OK"
 
 
@@ -44,6 +38,19 @@ def load_env_variables(input_variables: dict) -> None:
     """
     for k, v in input_variables.items():
         os.environ[k] = v
+        
+def read_pubsub_message(envelope: dict) -> dict:
+    import base64
+    import ast 
+     
+    pubsub_message = envelope["message"]
+    data_args = {}
+    if isinstance(pubsub_message, dict) and "data" in pubsub_message:
+        data = base64.b64decode(pubsub_message["data"]).decode("utf-8").strip()
+        # data_args = json.loads(data)
+        data_args = ast.literal_eval(data)
+    run(data_args)
+    return data_args
 
 if __name__ == "__main__":
     app.run(debug=False, host="0.0.0.0", port=container_port)
