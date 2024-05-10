@@ -17,5 +17,6 @@ resource "google_cloudfunctions_function" "jobs_launcher_cf" {
   service_account_email = google_service_account.sa-cloud-function.email
   environment_variables = {
     "CLOUD_RUN_URLS" = local.cloud_run_urls
+    "TOPIC_URLS"     = local.topics_urls
   }
 }

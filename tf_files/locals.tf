@@ -1,5 +1,6 @@
 locals {
-  cloud_run_urls = jsonencode({for k, v in local.jobs :  k => google_cloud_run_v2_service.jobs[k].uri})
+  cloud_run_urls = jsonencode({ for k, v in local.jobs : k => google_cloud_run_v2_service.jobs[k].uri })
+  topics_urls = jsonencode({ for k, v in local.jobs : k => google_pubsub_topic.jobs_launcher_topics[k].id })
   jobs = {
     first-job = {
       max_cpu_job    = 1
@@ -26,7 +27,7 @@ locals {
       scheduler = {
         description      = "Second job scheduler"
         cron             = "*/10 * * * *"
-        time_zone        = "Europe/Dublin"
+        time_zone        = "Europe/"
         attempt_deadline = "60s"
         paused           = true
         body = {

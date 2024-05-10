@@ -4,6 +4,7 @@ from flask import Flask
 from main import run
 from flask import request
 import json
+import base64
 
 container_port = os.environ.get("CONTAINER_PORT")
 
@@ -11,11 +12,25 @@ app = Flask(__name__)
 
 @app.route("/", methods=['POST'])
 def entrypoint():
-    print(request.data)
-    #-- Load input variables
-    input_variables = request.data.decode()
-    input_variables = json.loads(input_variables)
-    load_env_variables(input_variables = input_variables)
+    # print(request.data)
+    # #-- Load input variables
+    # input_variables = request.data.decode()
+    # input_variables = json.loads(input_variables)
+    # load_env_variables(input_variables = input_variables)
+    
+    envelope = request.get_json()
+    if not envelope:
+        msg = "no Pub/Sub message received"
+        return f"Bad Request: {msg}", 400
+
+    if not isinstance(envelope, dict) or "message" not in envelope:
+        msg = "invalid Pub/Sub message format"
+        return f"Bad Request: {msg}", 400
+
+    pubsub_message = envelope["message"]
+    if isinstance(pubsub_message, dict) and "data" in pubsub_message:
+        data = base64.b64decode(pubsub_message["data"]).decode("utf-8").strip()
+        print(data)
     
     #-- Execute function code
     run()

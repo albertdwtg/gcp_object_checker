@@ -9,6 +9,7 @@ from typing import List, Tuple
 from outputs import Execution
 
 cloud_run_urls = json.loads(os.environ.get("CLOUD_RUN_URLS"))
+topic_urls = json.loads(os.environ.get("TOPIC_URLS"))
 
 
 class JobType(Enum):
@@ -125,7 +126,8 @@ class JobHandler:
                 execution_instance = Execution(
                     job_name=self.job_name,
                     job_id=self.job_id,
-                    request_url=cloud_run_urls[self.job_name],
+                    # request_url=cloud_run_urls[self.job_name],
+                    request_url=topic_urls[self.job_name],
                     request_params=self.job_payload.get("variables")
                 )
 
