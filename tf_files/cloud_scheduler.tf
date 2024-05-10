@@ -14,7 +14,7 @@ resource "google_cloud_scheduler_job" "schedulers" {
     body        = base64encode(jsonencode(file("../src/${each.key}/payload.json")))
     headers = {
       "Content-Type" = "application/json"
-      "Body-SHA256" = filemd5(file("../src/${each.key}/payload.json"))
+      "Body-Hash" = md5(file("../src/${each.key}/payload.json"))
       # "Last-Deployment" = "${timestamp()}"
     }
     oidc_token {
