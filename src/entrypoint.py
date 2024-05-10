@@ -5,6 +5,7 @@ from main import run
 from flask import request
 import json
 from threading import Thread
+import main
 
 container_port = os.environ.get("CONTAINER_PORT")
 
@@ -49,7 +50,7 @@ def read_pubsub_message(envelope: dict) -> dict:
         data = base64.b64decode(pubsub_message["data"]).decode("utf-8").strip()
         # data_args = json.loads(data)
         data_args = ast.literal_eval(data)
-    run(data_args)
+    main.run(**data_args)
     return data_args
 
 if __name__ == "__main__":
