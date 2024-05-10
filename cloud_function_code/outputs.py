@@ -38,8 +38,10 @@ class Execution:
         # )
         
         data = str(self.request_params).encode("utf-8")
-        publisher.publish(
+        print(self.request_url, data)
+        future = publisher.publish(
             self.request_url,
             data
         )
+        print(future.result())
         print("Published")
