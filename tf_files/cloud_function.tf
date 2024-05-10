@@ -16,6 +16,7 @@ resource "google_cloudfunctions_function" "jobs_launcher_cf" {
   entry_point           = "run"
   service_account_email = google_service_account.sa-cloud-function.email
   environment_variables = {
-    "TOPIC_PATHS"     = local.topics_paths
+    "TOPIC_PATHS" = local.topics_paths
   }
+  ingress_settings = "ALLOW_INTERNAL_ONLY"
 }
