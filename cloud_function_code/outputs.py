@@ -1,9 +1,5 @@
 import uuid
 from dataclasses import dataclass, field
-
-import google.auth.transport.requests
-import google.oauth2.id_token
-import requests
 from google.cloud import pubsub_v1
 publisher = pubsub_v1.PublisherClient()
 
@@ -15,33 +11,17 @@ class Execution:
     job_name: str
     job_id: str
     execution_id: str = field(init=False)
-    request_url: str
-    request_params: dict
+    topic_path: str
+    message_params: dict
 
     def __post_init__(self):
         # -- create a unique ID for each execution
         self.execution_id = uuid.uuid4().hex
 
-    def run_request(self):
-        # # -- get token to invoke cloud run
-        # request = google.auth.transport.requests.Request()
-        # id_token = google.oauth2.id_token.fetch_id_token(
-        #     request, 
-        #     self.request_url
-        # )
-
-        # # -- Post request with required params
-        # response = requests.post(
-        #     headers={'Authorization': f'bearer {id_token}'},
-        #     url=self.request_url,
-        #     json=self.request_params
-        # )
+    def send_message(self):
         
-        data = str(self.request_params).encode("utf-8")
-        print(self.request_url, data)
+        data = str(self.message_params).encode("utf-8")
         future = publisher.publish(
-            self.request_url,
+            self.topic_path,
             data
         )
-        print(future.result())
-        print("Published")

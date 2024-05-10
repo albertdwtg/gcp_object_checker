@@ -12,11 +12,6 @@ app = Flask(__name__)
 
 @app.route("/", methods=['POST'])
 def entrypoint():
-    # print(request.data)
-    # #-- Load input variables
-    # input_variables = request.data.decode()
-    # input_variables = json.loads(input_variables)
-    # load_env_variables(input_variables = input_variables)
     
     envelope = request.get_json()
     if not envelope:
@@ -28,12 +23,13 @@ def entrypoint():
         return f"Bad Request: {msg}", 400
 
     pubsub_message = envelope["message"]
+    data_args = {}
     if isinstance(pubsub_message, dict) and "data" in pubsub_message:
         data = base64.b64decode(pubsub_message["data"]).decode("utf-8").strip()
-        print(data)
+        data_args = json.loads(data)
     
     #-- Execute function code
-    run()
+    run(**data_args)
     return "OK"
 
 

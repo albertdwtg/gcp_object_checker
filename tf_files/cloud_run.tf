@@ -8,7 +8,7 @@ resource "google_cloud_run_v2_service" "jobs" {
   name        = each.key
   location    = var.region
   description = "Job ${each.key} deployed with Jobs Launcher"
-  ingress     = "INGRESS_TRAFFIC_ALL"
+  ingress     = "INGRESS_TRAFFIC_INTERNAL_ONLY"
   template {
     timeout = each.value.timeout
     containers {

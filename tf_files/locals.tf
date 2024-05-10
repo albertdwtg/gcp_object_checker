@@ -1,6 +1,5 @@
 locals {
-  cloud_run_urls = jsonencode({ for k, v in local.jobs : k => google_cloud_run_v2_service.jobs[k].uri })
-  topics_urls = jsonencode({ for k, v in local.jobs : k => google_pubsub_topic.jobs_launcher_topics[k].id })
+  topics_paths = jsonencode({ for k, v in local.jobs : k => google_pubsub_topic.jobs_launcher_topics[k].id })
   jobs = {
     first-job = {
       max_cpu_job    = 1

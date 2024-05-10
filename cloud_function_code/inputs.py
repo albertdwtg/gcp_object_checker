@@ -8,8 +8,7 @@ from typing import List, Tuple
 
 from outputs import Execution
 
-cloud_run_urls = json.loads(os.environ.get("CLOUD_RUN_URLS"))
-topic_urls = json.loads(os.environ.get("TOPIC_URLS"))
+topic_paths = json.loads(os.environ.get("TOPIC_PATHS"))
 
 
 class JobType(Enum):
@@ -121,14 +120,13 @@ class JobHandler:
 
         # -- case when job type is UNIQUE
         if self.job_type == "UNIQUE":
-            if cloud_run_urls is not None:
+            if topic_paths is not None:
                 # -- create the only execution
                 execution_instance = Execution(
                     job_name=self.job_name,
                     job_id=self.job_id,
-                    # request_url=cloud_run_urls[self.job_name],
-                    request_url=topic_urls[self.job_name],
-                    request_params=self.job_payload.get("variables")
+                    topic_path=topic_paths[self.job_name],
+                    message_params=self.job_payload.get("variables")
                 )
 
                 # -- append required infos to lists
@@ -152,4 +150,4 @@ class JobHandler:
         """Function that runs all executions of the Job
         """
         for exec in self.job_executions:
-            exec.run_request()
+            exec.send_message()
