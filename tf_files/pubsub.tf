@@ -23,9 +23,6 @@ resource "google_pubsub_subscription" "jobs_launcher_subscription" {
   expiration_policy {
     ttl = ""
   }
-  dead_letter_policy {
-    max_delivery_attempts = 5
-  }
   retry_policy {
     minimum_backoff = "600s"
   }
