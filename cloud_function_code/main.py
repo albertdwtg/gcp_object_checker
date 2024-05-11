@@ -1,5 +1,5 @@
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 
 import functions_framework
 from inputs import JobHandler
@@ -71,5 +71,5 @@ def current_utc_datetime() -> str:
     Returns:
         str: current UTC timestamp
     """
-    value = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
+    value = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
     return value
