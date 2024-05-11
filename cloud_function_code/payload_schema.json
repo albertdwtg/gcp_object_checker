@@ -104,7 +104,7 @@
                 "required": ["parallel_increment_day", "parallel_max_date", "parallel_min_date", "parallel_param"]
             }
         }
-      ],
+    ],
     "required": ["job_owner", "creation_date", "job_type", "target_cloud_run"],
     "dependentRequired": {
         "parallel_type": ["parallel_param"],

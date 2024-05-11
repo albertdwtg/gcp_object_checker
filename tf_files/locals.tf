@@ -7,7 +7,7 @@ locals {
       cron             = "*/30 * * * *"
       time_zone        = "Europe/Paris"
       attempt_deadline = "60s"
-      paused           = false
+      paused           = true
       body             = base64encode(jsonencode(file("../scheduler_payloads/payload_1.json")))
     }
     second-scheduler = {
