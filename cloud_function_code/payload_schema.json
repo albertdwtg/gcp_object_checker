@@ -53,7 +53,8 @@
           "if": {
             "properties": {
               "parallel_type": { "const": "NUMERIC" }
-            }
+            },
+            "required": ["parallel_type"]
           },
           "then": {
             "required": ["parallel_increment", "parallel_max", "parallel_min", "parallel_param"]

@@ -163,9 +163,11 @@ class JobHandler:
             parallel_min = self.job_payload.get("parallel_min")
             parallel_max = self.job_payload.get("parallel_max")
             parallel_step = self.job_payload.get("parallel_increment")
-            array = np.arange(parallel_min, parallel_max, parallel_step)
+            array = np.arange(parallel_min, parallel_max, parallel_step).tolist()
+            print("ARRAY : ", array)
             for value in array:
                 variables_dict[parallel_param] = value
+                print("VARIABLES : ",variables_dict)
                 execution_instance = Execution(
                     job_name=self.job_name,
                     job_id=self.job_id,

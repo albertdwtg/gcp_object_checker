@@ -8,7 +8,7 @@ resource "google_cloudfunctions_function" "jobs_launcher_cf" {
   description = "Jobs launcher cloud function"
   runtime     = "python312"
 
-  available_memory_mb   = 128
+  available_memory_mb   = 256
   source_archive_bucket = google_storage_bucket.jobs_launcher_bucket.name
   source_archive_object = google_storage_bucket_object.blob_cf_code.name
   trigger_http          = true
