@@ -10,7 +10,7 @@ resource "google_cloud_run_v2_service" "jobs" {
   description = "Job ${each.key} deployed with Jobs Launcher"
   ingress     = "INGRESS_TRAFFIC_INTERNAL_ONLY"
   template {
-    timeout = each.value.timeout
+    timeout = lookup(each.value, "timeout", var.default_timeout)
     containers {
       image = "europe-west1-docker.pkg.dev/${var.project_id}/jobs-launcher/${each.key}:${var.images_tag}"
       ports {
@@ -18,8 +18,8 @@ resource "google_cloud_run_v2_service" "jobs" {
       }
       resources {
         limits = {
-          cpu    = each.value.max_cpu_job
-          memory = each.value.max_memory_job
+          cpu    = lookup(each.value, "max_cpu_job", var.default_max_cpu)
+          memory = lookup(each.value, "max_memory_job", var.default_max_memory)
         }
       }
       env {

@@ -35,8 +35,34 @@ variable "cloud_run_port" {
   description = "Port on which cloud run will listen"
 }
 
-variable "job_names" {
-  type        = list(string)
-  description = "job names"
-  default     = ["first-job", "second-job"]
+#### DEFAULT VARIABLES ####
+
+variable "default_paused" {
+  type        = bool
+  description = "Default value used for paused param in scheduler"
+}
+
+variable "default_time_zone" {
+  type        = string
+  description = "Default value used for time_zone param in scheduler"
+}
+
+variable "default_attempt_deadline" {
+  type        = string
+  description = "Default value used for attempt_deadline param in scheduler"
+}
+
+variable "default_max_cpu" {
+  type        = number
+  description = "Default value used for cpu param in cloud run"
+}
+
+variable "default_max_memory" {
+  type        = string
+  description = "Default value used for memory param in cloud run"
+}
+
+variable "default_timeout" {
+  type        = string
+  description = "Default value used for timeout param in cloud run"
 }
