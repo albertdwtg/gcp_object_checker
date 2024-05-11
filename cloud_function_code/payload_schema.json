@@ -23,6 +23,22 @@
         "variables": {
             "type": "object"
         },
+        "parallel_param": {
+            "type": "string"
+        },
+        "parallel_min": {
+            "type": "number"
+        },
+        "parallel_max": {
+            "type": "number"
+        },
+        "parallel_increment": {
+            "type": "number"
+        },
+        "parallel_type": {
+            "type": "string",
+            "enum": ["NUMERIC", "LIST", "DATE"]
+        },
         "steps": {
             "type": "array",
             "items": {

@@ -5,6 +5,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import List, Tuple
+import numpy as np
 
 from outputs import Execution
 
@@ -127,7 +128,10 @@ class JobHandler:
                 all_executions_ids.append(execution_instance.execution_id)
             else:
                 raise Exception(
-                    "No cloud run urls provided in environment variables")
+                    "No topic paths provided in environment variables")
+        if self.job_type == "MULTIPLE":
+            all_executions_ids, all_executions = self.__create_executions_for_multiple_type()
+        
         return all_executions_ids, all_executions
 
     def _validate_executions(self):
@@ -146,6 +150,47 @@ class JobHandler:
                 instance = exec
         return instance
     
+    def __create_executions_for_multiple_type(self):
+        all_executions = []
+        all_executions_ids = []
+        if "variables" not in self.job_payload:
+            variables_dict = {}
+        else:
+            variables_dict = self.job_payload["variables"]
+        parallel_param = self.job_payload.get("parallel_param")
+        parallel_type = self.job_payload.get("parallel_type")
+        if parallel_type == "NUMERIC":
+            parallel_min = self.job_payload.get("parallel_min")
+            parallel_max = self.job_payload.get("parallel_max")
+            parallel_step = self.job_payload.get("parallel_step")
+            array = np.arange(parallel_min, parallel_max, parallel_step)
+            for value in array:
+                variables_dict[parallel_param] = value
+                execution_instance = Execution(
+                    job_name=self.job_name,
+                    job_id=self.job_id,
+                    topic_path=topic_paths[self.target_cloud_run],
+                    message_params=variables_dict
+                )
+                # -- append required infos to lists
+                all_executions.append(execution_instance)
+                all_executions_ids.append(execution_instance.execution_id)
+        if parallel_type == "LIST":
+            parallel_list = self.job_payload.get("parallel_list")
+            for value in parallel_list:
+                variables_dict[parallel_param] = value
+                execution_instance = Execution(
+                    job_name=self.job_name,
+                    job_id=self.job_id,
+                    topic_path=topic_paths[self.target_cloud_run],
+                    message_params=variables_dict
+                )
+                # -- append required infos to lists
+                all_executions.append(execution_instance)
+                all_executions_ids.append(execution_instance.execution_id)
+        return all_executions_ids, all_executions
+                 
+            
     def run_executions(self):
         """Function that runs all executions of the Job
         """
