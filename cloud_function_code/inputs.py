@@ -11,6 +11,31 @@ from outputs import Execution
 
 topic_paths = json.loads(os.environ.get("TOPIC_PATHS"))
 
+def range_of_dates(date_min: str, date_max: str, increment_day: int) -> List[str]:
+    """Function used to generate a range of dates
+
+    Args:
+        date_min (str): start date of the range, in format YYYY-MM-DD
+        date_max (str): end date of the range, in format YYYY-MM-DD
+        increment_day (int): day to add between each date
+
+    Raises:
+        ValueError: If date_min >= date_max
+
+    Returns:
+        List[str]: range of dates in format YYYY-MM-DD
+    """
+    all_dates = []
+    parsed_date_min = datetime.strptime(date_min, "%Y-%m-%d")
+    parsed_date_max = datetime.strptime(date_max, "%Y-%m-%d")
+    if(parsed_date_min>=parsed_date_max):
+        raise ValueError("DATE_MIN must be lower than DATE_MAX")
+    all_dates.append(parsed_date_min.strftime("%Y-%m-%d"))
+    while parsed_date_min < parsed_date_max:
+        parsed_date_min = parsed_date_min + timedelta(days = increment_day)
+        all_dates.append(parsed_date_min.strftime("%Y-%m-%d"))
+    return all_dates
+
 
 @dataclass(kw_only=True)
 class JobHandler:
@@ -193,12 +218,27 @@ class JobHandler:
             exec.send_message()
             
 
-def range_of_dates(date_min: str, date_max: str, increment_day: int) -> List[str]:
-    all_dates = []
-    parsed_date_min = datetime.strptime(date_min, "%Y-%m-%d")
-    parsed_date_max = datetime.strptime(date_max, "%Y-%m-%d")
-    all_dates.append(parsed_date_min.strftime("%Y-%m-%d"))
-    while parsed_date_min < parsed_date_max:
-        parsed_date_min = parsed_date_min + timedelta(days = increment_day)
-        all_dates.append(parsed_date_min.strftime("%Y-%m-%d"))
-    return all_dates
+    # def range_of_dates(date_min: str, date_max: str, increment_day: int) -> List[str]:
+    #     """Function used to generate a range of dates
+
+    #     Args:
+    #         date_min (str): start date of the range, in format YYYY-MM-DD
+    #         date_max (str): end date of the range, in format YYYY-MM-DD
+    #         increment_day (int): day to add between each date
+
+    #     Raises:
+    #         ValueError: If date_min >= date_max
+
+    #     Returns:
+    #         List[str]: range of dates in format YYYY-MM-DD
+    #     """
+    #     all_dates = []
+    #     parsed_date_min = datetime.strptime(date_min, "%Y-%m-%d")
+    #     parsed_date_max = datetime.strptime(date_max, "%Y-%m-%d")
+    #     if(parsed_date_min>=parsed_date_max):
+    #         raise ValueError("DATE_MIN must be lower than DATE_MAX")
+    #     all_dates.append(parsed_date_min.strftime("%Y-%m-%d"))
+    #     while parsed_date_min < parsed_date_max:
+    #         parsed_date_min = parsed_date_min + timedelta(days = increment_day)
+    #         all_dates.append(parsed_date_min.strftime("%Y-%m-%d"))
+    #     return all_dates
