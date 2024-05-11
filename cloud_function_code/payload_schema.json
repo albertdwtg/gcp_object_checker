@@ -33,7 +33,8 @@
             "type": "number"
         },
         "parallel_increment": {
-            "type": "number"
+            "type": "number",
+            "exclusiveMinimum": 0
         },
         "parallel_min_date": {
             "type": "string",
@@ -46,7 +47,8 @@
             "pattern": "^[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$"
         },
         "parallel_increment_day": {
-            "type": "integer"
+            "type": "integer",
+            "exclusiveMinimum": 0
         },
         "parallel_type": {
             "type": "string",
