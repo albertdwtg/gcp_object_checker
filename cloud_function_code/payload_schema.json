@@ -48,6 +48,18 @@
         }
         
     },
+    "allOf": [
+        {
+          "if": {
+            "properties": {
+              "parallel_type": { "const": "NUMERIC" }
+            }
+          },
+          "then": {
+            "required": ["parallel_increment", "parallel_max", "parallel_min", "parallel_param"]
+          }
+        }
+      ],
     "required": ["job_owner", "creation_date", "job_type", "target_cloud_run"],
     "additionalProperties": false
 }

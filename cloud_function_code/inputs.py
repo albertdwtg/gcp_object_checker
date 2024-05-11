@@ -156,7 +156,7 @@ class JobHandler:
         if "variables" not in self.job_payload:
             variables_dict = {}
         else:
-            variables_dict = self.job_payload["variables"]
+            variables_dict = self.job_payload["variables"].copy()
         parallel_param = self.job_payload.get("parallel_param")
         parallel_type = self.job_payload.get("parallel_type")
         if parallel_type == "NUMERIC":
