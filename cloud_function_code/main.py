@@ -26,7 +26,7 @@ def run(request):
     #-- create a JobHandler object
     my_job = JobHandler(
         job_name=scheduler_name,
-        job_reception_time=current_utc_datetime,
+        job_reception_time=current_utc_datetime(),
         job_payload=payload,
         job_type=payload["job_type"].upper(),
         job_creation_date=payload["creation_date"],
