@@ -8,8 +8,8 @@
         "var2": "test2"
     },
     "parallel_type": "DATE",
-    "parallel_min_date": "2013-07-03",
-    "parallel_max_date": "2013-06-16",
+    "parallel_min_date": "2013-06-16",
+    "parallel_max_date": "2013-07-03",
     "parallel_increment_day": 2,
     "parallel_param": "speciallll"
 }
