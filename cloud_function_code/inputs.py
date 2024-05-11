@@ -162,7 +162,7 @@ class JobHandler:
         if parallel_type == "NUMERIC":
             parallel_min = self.job_payload.get("parallel_min")
             parallel_max = self.job_payload.get("parallel_max")
-            parallel_step = self.job_payload.get("parallel_step")
+            parallel_step = self.job_payload.get("parallel_increment")
             array = np.arange(parallel_min, parallel_max, parallel_step)
             for value in array:
                 variables_dict[parallel_param] = value

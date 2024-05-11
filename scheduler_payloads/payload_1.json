@@ -10,6 +10,6 @@
     "parallel_type": "NUMERIC",
     "parallel_min": 0,
     "parallel_max": 4,
-    "parallel_step": 1,
+    "parallel_increment": 1,
     "parallel_param": "special_var"
 }

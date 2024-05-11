@@ -46,6 +46,7 @@
             },
             "minItems": 1
         }
+        
     },
     "required": ["job_owner", "creation_date", "job_type", "target_cloud_run"],
     "additionalProperties": false
