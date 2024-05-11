@@ -10,10 +10,10 @@ resource "google_cloud_scheduler_job" "schedulers" {
   http_target {
     http_method = "POST"
     uri         = google_cloudfunctions_function.jobs_launcher_cf.https_trigger_url
-    body        = base64encode(jsonencode(file("../src/${each.key}/payload.json")))
+    body        = each.value.body
     headers = {
       "Content-Type" = "application/json"
-      "Body-Hash" = md5(file("../src/${each.key}/payload.json"))
+      # "Body-Hash" = md5(file("../src/${each.key}/payload.json"))
     }
     oidc_token {
       service_account_email = google_service_account.sa-cloud-function.email

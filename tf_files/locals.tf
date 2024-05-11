@@ -30,19 +30,21 @@ locals {
   }
 
   schedulers = {
-    second-scheduler = {
-      description      = "Second job scheduler"
-      cron             = "*/10 * * * *"
-      time_zone        = "Europe/Dublin"
-      attempt_deadline = "60s"
-      paused           = true
-    }
     first-scheduler = {
       description      = "First job scheduler"
       cron             = "*/30 * * * *"
       time_zone        = "Europe/Paris"
       attempt_deadline = "60s"
       paused           = false
+      body = base64encode(jsonencode(file("../schedulers/payload_1.json")))
+    }
+    second-scheduler = {
+      description      = "Second job scheduler"
+      cron             = "*/10 * * * *"
+      time_zone        = "Europe/Dublin"
+      attempt_deadline = "60s"
+      paused           = true
+      body = base64encode(jsonencode(file("../schedulers/payload_2.json")))
     }
   }
 
