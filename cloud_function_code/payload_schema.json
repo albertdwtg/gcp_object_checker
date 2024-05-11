@@ -35,6 +35,19 @@
         "parallel_increment": {
             "type": "number"
         },
+        "parallel_min_date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$"
+        },
+        "parallel_max_date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$"
+        },
+        "parallel_increment_day": {
+            "type": "integer"
+        },
         "parallel_type": {
             "type": "string",
             "enum": ["NUMERIC", "LIST", "DATE"]
@@ -59,7 +72,7 @@
         {
           "if": {
             "properties": {
-              "parallel_type": { "enum": ["NUMERIC", "DATE"] }
+              "parallel_type": { "const": "NUMERIC" }
             },
             "required": ["parallel_type"]
           },
@@ -69,15 +82,26 @@
         },
         {
             "if": {
-              "properties": {
+                "properties": {
                 "parallel_type": { "const": "LIST" }
-              },
-              "required": ["parallel_type"]
+                },
+                "required": ["parallel_type"]
             },
             "then": {
-              "required": ["parallel_list"]
+                "required": ["parallel_list"]
             }
-          }
+        },
+        {
+            "if": {
+                "properties": {
+                "parallel_type": { "const": "DATE" }
+                },
+                "required": ["parallel_type"]
+            },
+            "then": {
+                "required": ["parallel_increment_day", "parallel_max_date", "parallel_min_date", "parallel_param"]
+            }
+        }
       ],
     "required": ["job_owner", "creation_date", "job_type", "target_cloud_run"],
     "dependentRequired": {

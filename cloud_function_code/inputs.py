@@ -2,7 +2,7 @@ import hashlib
 import json
 import os
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timedelta
 from enum import Enum
 from typing import List, Tuple
 import numpy as np
@@ -162,11 +162,43 @@ class JobHandler:
                 # -- append required infos to lists
                 all_executions.append(execution_instance)
                 all_executions_ids.append(execution_instance.execution_id)
+        if parallel_type == "DATE":
+            parallel_min = self.job_payload.get("parallel_min_date")
+            parallel_max = self.job_payload.get("parallel_max_date")
+            parallel_step = int(self.job_payload.get("parallel_increment_day"))
+            range_of_dates = range_of_dates(
+                date_min = parallel_min, 
+                date_max = parallel_max,
+                increment_day = parallel_step
+            )
+            for value in range_of_dates:
+                variables_dict[parallel_param] = value
+                message_params = variables_dict.copy()
+                execution_instance = Execution(
+                    job_name=self.job_name,
+                    job_id=self.job_id,
+                    topic_path=topic_paths[self.target_cloud_run],
+                    message_params=message_params
+                )
+                # -- append required infos to lists
+                all_executions.append(execution_instance)
+                all_executions_ids.append(execution_instance.execution_id)
         return all_executions_ids, all_executions
-                 
+                
             
     def run_executions(self):
         """Function that runs all executions of the Job
         """
         for exec in self.job_executions:
             exec.send_message()
+            
+
+def range_of_dates(date_min: str, date_max: str, increment_day: int) -> List[str]:
+    all_dates = []
+    parsed_date_min = datetime.strptime(date_min, "%Y-%m-%d")
+    parsed_date_max = datetime.strptime(date_max, "%Y-%m-%d")
+    all_dates.append(parsed_date_min.strftime("%Y-%m-%d"))
+    while parsed_date_min < parsed_date_max:
+        parsed_date_min = parsed_date_min + timedelta(days = increment_day)
+        all_dates.append(parsed_date_min.strftime("%Y-%m-%d"))
+    return all_dates
