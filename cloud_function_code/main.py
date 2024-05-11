@@ -84,7 +84,7 @@ def validate_payload_schema(payload: dict):
     with open(filename) as f_in:
         schema =  json.load(f_in)
         
-    cloud_run_names = [k for k, v in topic_paths.items]
+    cloud_run_names = [k for k, v in topic_paths.items()]
     schema["properties"]["target_cloud_run"]["enum"] = cloud_run_names
     validate(
         instance = payload,
