@@ -35,8 +35,11 @@ class JobHandler:
     job_executions: List[Execution] = field(init=False)
     job_executions_ids: List[str] = field(init=False)
     function_execution_id: str
+    target_cloud_run: str = field(init=False)
 
     def __post_init__(self):
+        self.__define_target_cloud_run()
+        
         # -- create a job ID with a specific format
         self.job_id = self._create_job_id()
 
@@ -49,6 +52,12 @@ class JobHandler:
         self.job_executions_ids, self.job_executions = self._create_executions()
         self._validate_executions()
 
+    def __define_target_cloud_run(self):
+        if self.job_type in ["UNIQUE", "MULTIPLE"]:
+            self.target_cloud_run = self.job_payload.get("target_cloud_run")
+            if self.target_cloud_run is None:
+                raise ValueError("You must define a value for target_cloud_run parameter")
+    
     def _create_job_id(self) -> str:
         """Generate unique ID for a job based on the hash of job
         name and current timestamp
@@ -125,7 +134,7 @@ class JobHandler:
                 execution_instance = Execution(
                     job_name=self.job_name,
                     job_id=self.job_id,
-                    topic_path=topic_paths[self.job_name],
+                    topic_path=topic_paths[self.target_cloud_run],
                     message_params=self.job_payload.get("variables")
                 )
 
