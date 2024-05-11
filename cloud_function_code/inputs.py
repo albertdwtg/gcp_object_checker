@@ -44,7 +44,6 @@ class JobHandler:
         self.job_id = self._create_job_id()
 
         # -- make some checks about input variables
-        self._validate_job_type()
         self._validate_job_owner()
         self._validate_creation_date()
 
@@ -75,19 +74,6 @@ class JobHandler:
         job_id = job_name_hash + "_" + date_timestamp
         return job_id
 
-    def _validate_job_type(self):
-        """Function that checks if job type value is valid,
-        based on JobType enumerator
-
-        Raises:
-            ValueError: if job type value not present in JobType enumerator
-        """
-        possible_values = [name for name,
-                           member in JobType.__members__.items()]
-        if self.job_type not in possible_values:
-            raise ValueError(
-                f"job_type value is not valid, possible values : {possible_values}")
-
     def _validate_job_owner(self):
         """Function that checks if job owner value is valid
 
@@ -97,8 +83,6 @@ class JobHandler:
         """
         if any(char.isdigit() for char in self.job_owner):
             raise ValueError("Impossible to have digits in job_owner variable")
-        if len(self.job_owner) < 2:
-            raise ValueError("Job_owner length is too short")
 
     def _validate_creation_date(self):
         """Function that checks if creation date value is valid

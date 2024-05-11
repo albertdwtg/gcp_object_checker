@@ -1,0 +1,36 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "job_owner": {
+            "type": "string",
+            "pattern": "^[^0-9]*$",
+            "minLength": 2,
+            "maxLength": 100
+        },
+        "creation_date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$"
+        },
+        "job_type": {
+            "type": "string",
+            "enum": ["UNIQUE", "MULTIPLE", "PIPELINE"]
+        },
+        "target_cloud_run": {
+            "type": "string"
+        },
+        "variables": {
+            "type": "object"
+        },
+        "steps": {
+            "type": "array",
+            "items": {
+                "type": "object"
+            },
+            "minItems": 1
+        }
+    },
+    "required": ["job_owner", "creation_date", "job_type", "target_cloud_run"],
+    "additionalProperties": false
+}

@@ -1,8 +1,9 @@
 import json
 from datetime import datetime, timezone
+from jsonschema import validate
 
 import functions_framework
-from inputs import JobHandler
+from inputs import JobHandler, topic_paths
 
 
 @functions_framework.http
@@ -18,6 +19,10 @@ def run(request):
     """
     #-- convert input body into dictionnary
     payload = convert_payload_to_dict(request.data)
+    try:
+        validate_payload_schema(payload = payload)
+    except Exception as e:
+        raise ValueError(f"Your JSON payload is not valid : {str(e)}")
     
     #-- collect metadata from headers
     scheduler_name = request.headers.get("X-Cloudscheduler-Jobname")
@@ -73,3 +78,15 @@ def current_utc_datetime() -> str:
     """
     value = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
     return value
+
+def validate_payload_schema(payload: dict):
+    filename = "./payload_schema.json"
+    with open(filename) as f_in:
+        schema =  json.load(f_in)
+        
+    cloud_run_names = [k for k, v in topic_paths.items]
+    schema["properties"]["target_cloud_run"]["enum"] = cloud_run_names
+    validate(
+        instance = payload,
+        schema = schema
+    )
