@@ -1,11 +1,11 @@
 resource "google_cloud_scheduler_job" "schedulers" {
-  for_each         = local.jobs
+  for_each         = local.schedulers
   name             = each.key
-  description      = each.value.scheduler.description
-  schedule         = each.value.scheduler.cron
-  time_zone        = each.value.scheduler.time_zone
-  attempt_deadline = each.value.scheduler.attempt_deadline
-  paused           = each.value.scheduler.paused
+  description      = each.value.description
+  schedule         = each.value.cron
+  time_zone        = each.value.time_zone
+  attempt_deadline = each.value.attempt_deadline
+  paused           = each.value.paused
 
   http_target {
     http_method = "POST"

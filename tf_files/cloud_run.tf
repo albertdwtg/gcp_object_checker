@@ -4,7 +4,7 @@ resource "google_service_account" "sa-jobs-launcher" {
 }
 
 resource "google_cloud_run_v2_service" "jobs" {
-  for_each    = local.jobs
+  for_each    = local.cloud_runs
   name        = each.key
   location    = var.region
   description = "Job ${each.key} deployed with Jobs Launcher"

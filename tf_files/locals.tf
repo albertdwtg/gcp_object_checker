@@ -28,4 +28,36 @@ locals {
       }
     }
   }
+
+  schedulers = {
+    second-scheduler = {
+      description      = "Second job scheduler"
+      cron             = "*/10 * * * *"
+      time_zone        = "Europe/Dublin"
+      attempt_deadline = "60s"
+      paused           = true
+    }
+    first-scheduler = {
+      description      = "First job scheduler"
+      cron             = "*/30 * * * *"
+      time_zone        = "Europe/Paris"
+      attempt_deadline = "60s"
+      paused           = false
+    }
+  }
+
+  cloud_runs = {
+    first-job = {
+      max_cpu_job    = 1
+      max_memory_job = "512Mi"
+      timeout        = "15s"
+      max_retries    = 2
+    }
+    second-job = {
+      max_cpu_job    = 1
+      max_memory_job = "512Mi"
+      timeout        = "15s"
+      max_retries    = 2
+    }
+  }
 }

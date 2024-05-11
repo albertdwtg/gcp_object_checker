@@ -1,10 +1,10 @@
 resource "google_pubsub_topic" "jobs_launcher_topics" {
-  for_each = local.jobs
+  for_each = local.cloud_runs
   name     = "topic-launcher-${each.key}"
 }
 
 resource "google_pubsub_subscription" "jobs_launcher_subscription" {
-  for_each                   = local.jobs
+  for_each                   = local.cloud_runs
   name                       = "subscription-launcher-${each.key}"
   topic                      = google_pubsub_topic.jobs_launcher_topics[each.key].name
   retain_acked_messages      = false
