@@ -12,15 +12,6 @@ from outputs import Execution
 topic_paths = json.loads(os.environ.get("TOPIC_PATHS"))
 
 
-class JobType(Enum):
-    """
-    Enumerator that lists all availables job types
-    """
-    PIPELINE = ""
-    MULTIPLE = ""
-    UNIQUE = ""
-
-
 @dataclass(kw_only=True)
 class JobHandler:
     """
@@ -43,10 +34,6 @@ class JobHandler:
         
         # -- create a job ID with a specific format
         self.job_id = self._create_job_id()
-
-        # -- make some checks about input variables
-        self._validate_job_owner()
-        self._validate_creation_date()
 
         # -- create executions for a Job
         self.job_executions_ids, self.job_executions = self._create_executions()
@@ -75,29 +62,6 @@ class JobHandler:
         job_id = job_name_hash + "_" + date_timestamp
         return job_id
 
-    def _validate_job_owner(self):
-        """Function that checks if job owner value is valid
-
-        Raises:
-            ValueError: If value contains a digit
-            ValueError: If value is less than 2 characters
-        """
-        if any(char.isdigit() for char in self.job_owner):
-            raise ValueError("Impossible to have digits in job_owner variable")
-
-    def _validate_creation_date(self):
-        """Function that checks if creation date value is valid
-
-        Raises:
-            ValueError: if value is not is format YYYY-MM-DD
-        """
-        date_split = self.job_creation_date.split("-")
-        if len(date_split) != 3:
-            raise ValueError(
-                "Incorrect format for creation_date, must be YYYY-MM-DD")
-        elif (len(date_split[0]) != 4 or len(date_split[1]) != 2 or len(date_split[2]) != 2):
-            raise ValueError(
-                "Incorrect format for creation_date, must be YYYY-MM-DD")
 
     def _create_executions(self) -> Tuple[List[str], List[Execution]]:
         """Function that create all executions needed in the Job
@@ -164,10 +128,8 @@ class JobHandler:
             parallel_max = self.job_payload.get("parallel_max")
             parallel_step = self.job_payload.get("parallel_increment")
             array = np.arange(parallel_min, parallel_max, parallel_step).tolist()
-            print("ARRAY : ", array)
             for value in array:
                 variables_dict[parallel_param] = value
-                print("VARIABLES : ",variables_dict)
                 message_params = variables_dict.copy()
                 execution_instance = Execution(
                     job_name=self.job_name,
@@ -182,11 +144,12 @@ class JobHandler:
             parallel_list = self.job_payload.get("parallel_list")
             for value in parallel_list:
                 variables_dict[parallel_param] = value
+                message_params = variables_dict.copy()
                 execution_instance = Execution(
                     job_name=self.job_name,
                     job_id=self.job_id,
                     topic_path=topic_paths[self.target_cloud_run],
-                    message_params=variables_dict
+                    message_params=message_params
                 )
                 # -- append required infos to lists
                 all_executions.append(execution_instance)

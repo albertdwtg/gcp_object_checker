@@ -1,10 +1,12 @@
 {
     "job_owner": "Albert",
     "creation_date": "2024-05-08",
-    "job_type": "UNIQUE",
+    "job_type": "MULTIPLE",
     "target_cloud_run": "second-job", 
     "variables" : {
         "var1": "test1",
         "var2": "test2"
-    }
+    },
+    "parallel_type": "LIST",
+    "parallel_list": ["ONE","TWO","THREE"]
 }
