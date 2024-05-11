@@ -80,5 +80,9 @@
           }
       ],
     "required": ["job_owner", "creation_date", "job_type", "target_cloud_run"],
+    "dependentRequired": {
+        "parallel_type": ["parallel_param"],
+        "parallel_param": ["parallel_type"]
+    },
     "additionalProperties": false
 }

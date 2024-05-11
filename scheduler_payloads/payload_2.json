@@ -8,5 +8,6 @@
         "var2": "test2"
     },
     "parallel_type": "LIST",
-    "parallel_list": ["ONE","TWO","THREE"]
+    "parallel_list": ["ONE","TWO","THREE"],
+    "parallel_name": "speciallll"
 }

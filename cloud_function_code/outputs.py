@@ -15,6 +15,7 @@ class Execution:
     topic_path: str
     message_params: dict
     # depends_on: List[int] = field(init=False)
+    done: bool = field(default=False, init=False)
 
     def __post_init__(self):
         # -- create a unique ID for each execution
@@ -22,9 +23,11 @@ class Execution:
         
     
     def send_message(self):
-        
+        """Function to send a message through pubsub with desired params
+        """
         data = str(self.message_params).encode("utf-8")
         future = publisher.publish(
             self.topic_path,
             data
         )
+        self.done = True
