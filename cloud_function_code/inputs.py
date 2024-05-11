@@ -168,11 +168,12 @@ class JobHandler:
             for value in array:
                 variables_dict[parallel_param] = value
                 print("VARIABLES : ",variables_dict)
+                message_params = variables_dict.copy()
                 execution_instance = Execution(
                     job_name=self.job_name,
                     job_id=self.job_id,
                     topic_path=topic_paths[self.target_cloud_run],
-                    message_params=variables_dict
+                    message_params=message_params
                 )
                 # -- append required infos to lists
                 all_executions.append(execution_instance)
