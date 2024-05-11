@@ -9,5 +9,5 @@
     },
     "parallel_type": "LIST",
     "parallel_list": ["ONE","TWO","THREE"],
-    "parallel_name": "speciallll"
+    "parallel_param": "speciallll"
 }

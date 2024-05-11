@@ -59,7 +59,7 @@
         {
           "if": {
             "properties": {
-              "parallel_type": { "const": "NUMERIC" }
+              "parallel_type": { "enum": ["NUMERIC", "DATE"] }
             },
             "required": ["parallel_type"]
           },
