@@ -155,6 +155,13 @@ class JobHandler:
         if len(self.job_executions) == 0 or len(self.job_executions_ids) == 0:
             raise ValueError("List of executions cannot be empty")
 
+    def get_execution(self, execution_id: str):
+        instance = None
+        for exec in self.job_executions:
+            if exec.execution_id == execution_id:
+                instance = exec
+        return instance
+    
     def run_executions(self):
         """Function that runs all executions of the Job
         """

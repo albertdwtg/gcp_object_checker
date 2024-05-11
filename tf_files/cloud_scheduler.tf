@@ -3,9 +3,9 @@ resource "google_cloud_scheduler_job" "schedulers" {
   name             = each.key
   description      = each.value.scheduler.description
   schedule         = each.value.scheduler.cron
-  time_zone        = lookup(each.value.scheduler, "time_zone", var.default_time_zone)
-  attempt_deadline = lookup(each.value.scheduler, "attempt_deadline", var.default_attempt_deadline)
-  paused           = lookup(each.value.scheduler, "paused", var.default_paused)
+  time_zone        = each.value.scheduler.time_zone
+  attempt_deadline = each.value.scheduler.attempt_deadline
+  paused           = each.value.scheduler.paused
 
   http_target {
     http_method = "POST"

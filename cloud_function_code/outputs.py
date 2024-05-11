@@ -1,4 +1,5 @@
 import uuid
+from typing import List
 from dataclasses import dataclass, field
 from google.cloud import pubsub_v1
 publisher = pubsub_v1.PublisherClient()
@@ -13,11 +14,13 @@ class Execution:
     execution_id: str = field(init=False)
     topic_path: str
     message_params: dict
+    # depends_on: List[int] = field(init=False)
 
     def __post_init__(self):
         # -- create a unique ID for each execution
         self.execution_id = uuid.uuid4().hex
-
+        
+    
     def send_message(self):
         
         data = str(self.message_params).encode("utf-8")
