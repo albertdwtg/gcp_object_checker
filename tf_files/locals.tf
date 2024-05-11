@@ -36,7 +36,7 @@ locals {
       time_zone        = "Europe/Paris"
       attempt_deadline = "60s"
       paused           = false
-      body = base64encode(jsonencode(file("../schedulers/payload_1.json")))
+      body = base64encode(jsonencode(file("../scheduler_payloads/payload_1.json")))
     }
     second-scheduler = {
       description      = "Second job scheduler"
@@ -44,7 +44,7 @@ locals {
       time_zone        = "Europe/Dublin"
       attempt_deadline = "60s"
       paused           = true
-      body = base64encode(jsonencode(file("../schedulers/payload_2.json")))
+      body = base64encode(jsonencode(file("../scheduler_payloads/payload_2.json")))
     }
   }
 
