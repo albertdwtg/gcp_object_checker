@@ -9,6 +9,11 @@ provider "google" {
   region  = var.region
 }
 
+resource "google_project_service" "gcp_apis" {
+  project = var.project_id
+  service = "secretmanager.googleapis.com"
+}
+
 module "air_quality" {
   source                  = "./modules/air_quality"
   project_id              = var.project_id
