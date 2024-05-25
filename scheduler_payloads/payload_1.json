@@ -4,8 +4,8 @@
     "job_type": "UNIQUE",
     "target_cloud_run": "first-job", 
     "variables" : {
-        "dataset_id": "model-zoo-382809",
-        "project_id": "raw_data_air_quality",
+        "project_id": "model-zoo-382809",
+        "dataset_id": "raw_data_air_quality",
         "table_name": "test"
     }
 }

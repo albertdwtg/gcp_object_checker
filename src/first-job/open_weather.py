@@ -39,7 +39,6 @@ class Client:
         
         full_table_name = f'{project_id}.{dataset_id}.{table_name}'
         bq_client.insert_rows_json(full_table_name, output_records)
-        print(output_records)
         # print(response.json())
     
     def __convert_date_to_unix(self, date_str: str) -> int:
