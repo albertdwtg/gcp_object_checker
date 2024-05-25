@@ -107,10 +107,15 @@ class Client:
         schema = [bigquery.SchemaField(field["name"], field["type"], mode=field["mode"]) for field in schema_json]
 
         table = bigquery.Table(full_table_name, schema=schema)
+        table.time_partitioning = bigquery.TimePartitioning(
+            type_=bigquery.TimePartitioningType.DAY,
+            field="utc_timestamp",  # name of column to use for partitioning
+            expiration_ms=1000*60*60*24*365*5
+        )
 
         bq_client.create_table(table, exists_ok = True)
         
-        # bq_client.insert_rows_json(full_table_name, output_records)
+        bq_client.insert_rows_json(full_table_name, output_records)
         # print(response.json())
     
     def __convert_date_to_unix(self, date_str: str) -> int:
