@@ -24,8 +24,8 @@ def run(**kwargs):
             report_type="Daily",
             latitude=coord[0],
             longitude=coord[1],
-            start_time_str = "2023-09-13",
-            end_time_str = "2023-09-14",
+            start_time_str = "2023-05-25",
+            end_time_str = "2024-05-25",
             table_name = city.lower(),
             project_id = kwargs["project_id"],
             dataset_id = kwargs["dataset_id"]
