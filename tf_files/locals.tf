@@ -3,11 +3,11 @@ locals {
 
   schedulers = {
     first-scheduler = {
-      description      = "First job scheduler"
-      cron             = "*/30 * * * *"
+      description      = "Job scheduler for daily data of open weather API for pollution"
+      cron             = "* 2 * * *"
       time_zone        = "Europe/Paris"
       attempt_deadline = "60s"
-      paused           = true
+      paused           = false
       body             = base64encode(jsonencode(file("../scheduler_payloads/payload_1.json")))
     }
     second-scheduler = {
