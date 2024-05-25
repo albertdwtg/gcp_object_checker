@@ -120,7 +120,7 @@ class Client:
         query = """
         DELETE
             {full_table_name}
-        WHERE utc_timestamp BETWEEN {start_date} and {end_date}
+        WHERE utc_timestamp BETWEEN "{start_date}" and "{end_date}"
         """
         query = query.format(
             full_table_name = full_table_name,
