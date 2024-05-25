@@ -3,10 +3,8 @@ from datetime import datetime, timezone, timedelta
 from typing import List
 from google.cloud import bigquery
 from google.cloud.exceptions import NotFound
-import pandas as pd
-import pandas_gbq
-
 bq_client = bigquery.Client()
+import json
 
 schema_json = [
     {
@@ -104,11 +102,11 @@ class Client:
         output_records = self.__format_output(json_response = response.json())
         
         full_table_name = f'{project_id}.{dataset_id}.{table_name}'
-        
+        schema = [bigquery.SchemaField(field["name"], field["type"], mode=field["mode"]) for field in schema_json]
         try:
-            bq_client.get_table(full_table_name)
+            table = bq_client.get_table(full_table_name)
         except NotFound:
-            schema = [bigquery.SchemaField(field["name"], field["type"], mode=field["mode"]) for field in schema_json]
+            #schema = [bigquery.SchemaField(field["name"], field["type"], mode=field["mode"]) for field in schema_json]
 
             table = bigquery.Table(full_table_name, schema=schema)
             table.time_partitioning = bigquery.TimePartitioning(
@@ -132,10 +130,12 @@ class Client:
         job = bq_client.query(query)
         result = job.result()
         
-        bq_client.insert_rows_json(full_table_name, output_records)
-        # table_id = f'{dataset_id}.{table_name}'
-        # pandas_gbq.to_gbq(output_records, table_id, project_id=project_id)
-        # print(response.json())
+        #bq_client.insert_rows_json(full_table_name, output_records)
+        job_config = bigquery.LoadJobConfig()
+        job_config.source_format = bigquery.SourceFormat.NEWLINE_DELIMITED_JSON
+        job_config.schema = schema
+        json_object = json.loads(output_records)
+        job = bq_client.load_table_from_json(json_object, table, job_config = job_config)
     
     def __convert_date_to_unix(self, date_str: str) -> int:
         """function that converts a string date in format YYYT-MM-DD to its
@@ -203,5 +203,4 @@ class Client:
                 "nh3": record["components"].get("nh3"),
             }
             all_records.append(record_dict)
-        # df = pd.DataFrame(all_records)
         return all_records
