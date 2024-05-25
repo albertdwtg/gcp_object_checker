@@ -15,7 +15,7 @@ cities = {
 }
 
 def run(**kwargs):
-    print(kwargs)
+    # print(kwargs)
     
     c = Client("b964662692dfe4505387dd88765771bf")
     c.run_report(
@@ -24,10 +24,9 @@ def run(**kwargs):
         longitude=50,
         start_time = "2023-09-13",
         end_time = "2023-09-14",
-        table_name = "test",
-        project_id = "model-zoo-382809",
-        dataset_id = "raw_data_air_quality",
-        partition_field = ""
+        table_name = kwargs["table_name"],
+        project_id = kwargs["project_id"],
+        dataset_id = kwargs["dataset_id"]
     )
     print("image run 1")
     

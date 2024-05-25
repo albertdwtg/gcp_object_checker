@@ -13,7 +13,7 @@ class Client:
     def run_report(self, report_type: str, latitude: float, 
                    longitude: float, start_time: str, end_time: str,
                    project_id: str, dataset_id: str,
-                   table_name: str, partition_field: str):
+                   table_name: str):
         #-- work on dates
         self.__check_date_format(
             start_time = start_time,
@@ -21,7 +21,7 @@ class Client:
             report_type = report_type
         )
         start_time = self.__convert_date_to_unix(start_time)
-        end_time = self.__convert_date_to_unix(end_time)
+        end_time = self.__convert_date_to_unix(end_time)-1
         
         #-- format request with params
         request_str = "http://api.openweathermap.org/data/2.5/air_pollution/history?lat={lat}&lon={long}&start={start}&end={end}&appid={api_key}"
