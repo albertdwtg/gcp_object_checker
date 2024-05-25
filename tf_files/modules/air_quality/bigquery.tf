@@ -14,18 +14,13 @@ resource "google_bigquery_table" "default" {
 
   time_partitioning {
     type  = "DAY"
-    field = "utc_datetime"
+    field = "utc_timestamp"
   }
   schema = <<EOF
     [
     {
         "name": "utc_timestamp",
         "type": "TIMESTAMP",
-        "mode": "NULLABLE"
-    },
-    {
-        "name": "utc_datetime",
-        "type": "DATETIME",
         "mode": "NULLABLE"
     },
     {

@@ -95,7 +95,6 @@ class Client:
         for record in json_response["list"]:
             record_dict = {
                 "utc_timestamp": record["dt"],
-                "utc_datetime": datetime.fromtimestamp(record["dt"]).strftime("%Y-%m-%dT%H:%M:%S"),
                 "latitude": lat,
                 "longitude": long,
                 "air_quality_index": record["main"].get("aqi"),
