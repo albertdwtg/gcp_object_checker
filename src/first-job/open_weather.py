@@ -3,6 +3,8 @@ from datetime import datetime, timezone, timedelta
 from typing import List
 from google.cloud import bigquery
 from google.cloud.exceptions import NotFound
+import pandas as pd
+import pandas_gbq
 
 bq_client = bigquery.Client()
 
@@ -127,9 +129,12 @@ class Client:
             start_date = start_time_str,
             end_date = end_time_str
         )
-        bq_client.query(query)
+        job = bq_client.query(query)
+        result = job.result()
         
-        bq_client.insert_rows_json(full_table_name, output_records)
+        # bq_client.insert_rows_json(full_table_name, output_records)
+        table_id = f'{dataset_id}.{table_name}'
+        pandas_gbq.to_gbq(output_records, table_id, project_id=project_id)
         # print(response.json())
     
     def __convert_date_to_unix(self, date_str: str) -> int:
@@ -198,4 +203,5 @@ class Client:
                 "nh3": record["components"].get("nh3"),
             }
             all_records.append(record_dict)
-        return all_records
+        df = pd.DataFrame(all_records)
+        return df
