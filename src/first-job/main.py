@@ -12,7 +12,7 @@ def run(**kwargs):
         end_time = "2023-09-14",
         table_name = "test",
         project_id = "model-zoo-382809",
-        dataset_id = "open_weather_raw_data",
+        dataset_id = "raw_data_air_quality",
         partition_field = ""
     )
     print("image run 1")
