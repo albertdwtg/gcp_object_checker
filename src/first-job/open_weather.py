@@ -134,7 +134,7 @@ class Client:
         job_config = bigquery.LoadJobConfig()
         job_config.source_format = bigquery.SourceFormat.NEWLINE_DELIMITED_JSON
         job_config.schema = schema
-        json_object = json.loads(output_records)
+        json_object = json.dumps(output_records)
         job = bq_client.load_table_from_json(json_object, table, job_config = job_config)
     
     def __convert_date_to_unix(self, date_str: str) -> int:
