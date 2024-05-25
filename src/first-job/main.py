@@ -1,6 +1,14 @@
 import time
 from open_weather import Client
 
+cities = {
+    "Paris" : [48.853, 2.349],
+    "Lisbon" : [38.717, -9.133],
+    "Hong_kong" : [22.285, 114.158],
+    "Beijing": [39.907, 116.397],
+    "Shanghai": [31.222, 121.458]
+}
+
 def run(**kwargs):
     print(kwargs)
     c = Client("b964662692dfe4505387dd88765771bf")
@@ -16,3 +24,4 @@ def run(**kwargs):
         partition_field = ""
     )
     print("image run 1")
+    
