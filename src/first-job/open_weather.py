@@ -2,6 +2,7 @@ import requests
 from datetime import datetime, timezone, timedelta
 from typing import List
 from google.cloud import bigquery
+from google.cloud.exceptions import NotFound
 
 bq_client = bigquery.Client()
 
@@ -74,17 +75,17 @@ class Client:
         self.api_key = api_key
     
     def run_report(self, report_type: str, latitude: float, 
-                   longitude: float, start_time: str, end_time: str,
+                   longitude: float, start_time_str: str, end_time_str: str,
                    project_id: str, dataset_id: str,
                    table_name: str):
         #-- work on dates
         self.__check_date_format(
-            start_time = start_time,
-            end_time = end_time,
+            start_time = start_time_str,
+            end_time = end_time_str,
             report_type = report_type
         )
-        start_time = self.__convert_date_to_unix(start_time)
-        end_time = self.__convert_date_to_unix(end_time)-1
+        start_time = self.__convert_date_to_unix(start_time_str)
+        end_time = self.__convert_date_to_unix(end_time_str)-1
         
         #-- format request with params
         request_str = "http://api.openweathermap.org/data/2.5/air_pollution/history?lat={lat}&lon={long}&start={start}&end={end}&appid={api_key}"
@@ -102,18 +103,31 @@ class Client:
         
         full_table_name = f'{project_id}.{dataset_id}.{table_name}'
         
-        # table = bq_client.get_table(full_table_name)
-        # if not table:
-        schema = [bigquery.SchemaField(field["name"], field["type"], mode=field["mode"]) for field in schema_json]
+        try:
+            bq_client.get_table(full_table_name)
+        except NotFound:
+            schema = [bigquery.SchemaField(field["name"], field["type"], mode=field["mode"]) for field in schema_json]
 
-        table = bigquery.Table(full_table_name, schema=schema)
-        table.time_partitioning = bigquery.TimePartitioning(
-            type_=bigquery.TimePartitioningType.DAY,
-            field="utc_timestamp",  # name of column to use for partitioning
-            expiration_ms=1000*60*60*24*365*5
+            table = bigquery.Table(full_table_name, schema=schema)
+            table.time_partitioning = bigquery.TimePartitioning(
+                type_=bigquery.TimePartitioningType.DAY,
+                field="utc_timestamp",  # name of column to use for partitioning
+                expiration_ms=1000*60*60*24*365*5
+            )
+
+            bq_client.create_table(table, exists_ok = True)
+        
+        query = """
+        DELETE
+            {full_table_name}
+        WHERE utc_timestamp BETWEEN {start_date} and {end_date}
+        """
+        query = query.format(
+            full_table_name = full_table_name,
+            start_date = start_time_str,
+            end_date = end_time_str
         )
-
-        bq_client.create_table(table, exists_ok = True)
+        bq_client.query(query)
         
         bq_client.insert_rows_json(full_table_name, output_records)
         # print(response.json())
