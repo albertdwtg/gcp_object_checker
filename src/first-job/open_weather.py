@@ -71,6 +71,8 @@ schema_json = [
 
 class Client:
     
+    partitioning_field: str = "utc_timestamp"
+    
     def __init__(self, api_key: str) -> None:
         self.api_key = api_key
     
@@ -103,39 +105,46 @@ class Client:
         
         full_table_name = f'{project_id}.{dataset_id}.{table_name}'
         schema = [bigquery.SchemaField(field["name"], field["type"], mode=field["mode"]) for field in schema_json]
+        #-- create table if not exists
         try:
             table = bq_client.get_table(full_table_name)
         except NotFound:
-            #schema = [bigquery.SchemaField(field["name"], field["type"], mode=field["mode"]) for field in schema_json]
-
             table = bigquery.Table(full_table_name, schema=schema)
             table.time_partitioning = bigquery.TimePartitioning(
                 type_=bigquery.TimePartitioningType.DAY,
-                field="utc_timestamp",  # name of column to use for partitioning
+                field=self.partitioning_field, 
                 expiration_ms=1000*60*60*24*365*5
             )
 
             bq_client.create_table(table, exists_ok = True)
         
-        query = """
-        DELETE
-            {full_table_name}
-        WHERE utc_timestamp BETWEEN "{start_date}" and "{end_date}"
-        """
-        query = query.format(
+        self.__delete_old_data(
             full_table_name = full_table_name,
             start_date = start_time_str,
             end_date = end_time_str
         )
-        job = bq_client.query(query)
-        result = job.result()
-        
-        #bq_client.insert_rows_json(full_table_name, output_records)
         job_config = bigquery.LoadJobConfig()
         job_config.source_format = bigquery.SourceFormat.NEWLINE_DELIMITED_JSON
         job_config.schema = schema
-        # json_object = json.dumps(output_records)
         job = bq_client.load_table_from_json(output_records, table, job_config = job_config)
+    
+    def __delete_old_data(self,full_table_name: str, start_date: str, end_date: str):
+
+        query = """
+        DELETE
+            {full_table_name}
+        WHERE {partitioning_field} BETWEEN "{start_date}" and "{end_date}"
+        """
+        query = query.format(
+            full_table_name = full_table_name,
+            partitioning_field = self.partitioning_field,
+            start_date = start_date,
+            end_date = end_date
+        )
+        job = bq_client.query(query)
+        result = job.result()
+        
+        
     
     def __convert_date_to_unix(self, date_str: str) -> int:
         """function that converts a string date in format YYYT-MM-DD to its
@@ -189,7 +198,7 @@ class Client:
         all_records = []
         for record in json_response["list"]:
             record_dict = {
-                "utc_timestamp": record["dt"],
+                self.partitioning_field: record["dt"],
                 "latitude": lat,
                 "longitude": long,
                 "air_quality_index": record["main"].get("aqi"),
