@@ -16,9 +16,9 @@ cities = {
 }
 
 def run(**kwargs):
-    # print(kwargs)
     
     c = Client("b964662692dfe4505387dd88765771bf")
+    
     report_type = kwargs.get("report_type")
     if report_type.upper()=="CATCHUP":
         start_time = kwargs["start_time"]
@@ -29,7 +29,7 @@ def run(**kwargs):
         end_time = datetime.today().strftime('%Y-%m-%d')
     
     for city, coord in cities.items():
-        print(city)
+        print(city, start_time, end_time)
         c.run_report(
             report_type=report_type,
             latitude=coord[0],
@@ -40,8 +40,8 @@ def run(**kwargs):
             project_id = kwargs["project_id"],
             dataset_id = kwargs["dataset_id"]
         )
-    print("image run 1")
     
+
 def access_secret_version(project_id, secret_id, version_id="latest"):
     # Create the Secret Manager client.
     secret_client = secretmanager.SecretManagerServiceClient()
