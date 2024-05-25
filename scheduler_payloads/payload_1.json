@@ -6,8 +6,6 @@
     "variables" : {
         "project_id": "model-zoo-382809",
         "dataset_id": "raw_data_air_quality",
-        "report_type": "CATCHUP",
-        "start_time": "2023-05-25",
-        "end_time": "2024-05-25"
+        "report_type": "DAILY"
     }
 }
