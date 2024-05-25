@@ -38,5 +38,5 @@ variable "cloud_run_port" {
 variable "open_weather_api_secret" {
   type        = string
   description = "Secret api key to use in open weather api"
-  default     = "test"
+  default     = "testt"
 }
