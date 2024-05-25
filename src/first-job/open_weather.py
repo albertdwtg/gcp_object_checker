@@ -102,14 +102,15 @@ class Client:
         
         full_table_name = f'{project_id}.{dataset_id}.{table_name}'
         
-        table = bq_client.get_table(full_table_name)
-        if not table:
-            schema = [bigquery.SchemaField(field["name"], field["type"], mode=field["mode"]) for field in schema_json]
+        # table = bq_client.get_table(full_table_name)
+        # if not table:
+        schema = [bigquery.SchemaField(field["name"], field["type"], mode=field["mode"]) for field in schema_json]
 
-            table = bigquery.Table(full_table_name, schema=schema)
+        table = bigquery.Table(full_table_name, schema=schema)
 
-            bq_client.create_table(table = full_table_name, exists_ok = True)
-        bq_client.insert_rows_json(full_table_name, output_records)
+        bq_client.create_table(table, exists_ok = True)
+        
+        # bq_client.insert_rows_json(full_table_name, output_records)
         # print(response.json())
     
     def __convert_date_to_unix(self, date_str: str) -> int:
