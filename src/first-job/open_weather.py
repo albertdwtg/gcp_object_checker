@@ -5,6 +5,69 @@ from google.cloud import bigquery
 
 bq_client = bigquery.Client()
 
+schema_json = [
+    {
+        "name": "utc_timestamp",
+        "type": "TIMESTAMP",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "latitude",
+        "type": "FLOAT64",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "longitude",
+        "type": "FLOAT64",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "air_quality_index",
+        "type": "INT64",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "co",
+        "type": "FLOAT64",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "no",
+        "type": "FLOAT64",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "no2",
+        "type": "FLOAT64",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "o3",
+        "type": "FLOAT64",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "so2",
+        "type": "FLOAT64",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "pm2_5",
+        "type": "FLOAT64",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "pm10",
+        "type": "FLOAT64",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "nh3",
+        "type": "FLOAT64",
+        "mode": "NULLABLE"
+    }
+]
+
 class Client:
     
     def __init__(self, api_key: str) -> None:
@@ -38,6 +101,14 @@ class Client:
         output_records = self.__format_output(json_response = response.json())
         
         full_table_name = f'{project_id}.{dataset_id}.{table_name}'
+        
+        table = bq_client.get_table(full_table_name)
+        if not table:
+            schema = [bigquery.SchemaField(field["name"], field["type"], mode=field["mode"]) for field in schema_json]
+
+            table = bigquery.Table(full_table_name, schema=schema)
+
+            bq_client.create_table(table = full_table_name, exists_ok = True)
         bq_client.insert_rows_json(full_table_name, output_records)
         # print(response.json())
     

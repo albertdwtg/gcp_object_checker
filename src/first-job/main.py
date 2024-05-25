@@ -18,16 +18,18 @@ def run(**kwargs):
     # print(kwargs)
     
     c = Client("b964662692dfe4505387dd88765771bf")
-    c.run_report(
-        report_type="Daily",
-        latitude=50,
-        longitude=50,
-        start_time = "2023-09-13",
-        end_time = "2023-09-14",
-        table_name = kwargs["table_name"],
-        project_id = kwargs["project_id"],
-        dataset_id = kwargs["dataset_id"]
-    )
+    for city, coord in cities.items():
+        print(city)
+        c.run_report(
+            report_type="Daily",
+            latitude=coord[0],
+            longitude=coord[1],
+            start_time = "2023-09-13",
+            end_time = "2023-09-14",
+            table_name = city.lower(),
+            project_id = kwargs["project_id"],
+            dataset_id = kwargs["dataset_id"]
+        )
     print("image run 1")
     
 def access_secret_version(project_id, secret_id, version_id="latest"):
